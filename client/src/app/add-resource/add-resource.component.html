@@ -1,2 +1,51 @@
+<div class="container">
+  <h2>Manage Resources</h2>
+  
+  <div *ngIf="showError" class="alert alert-danger">{{ errorMessage }}</div>
+  
+  <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label>Resource Name</label>
+      <input type="text" formControlName="name" placeholder="e.g. Sony Projector X1">
+    </div>
+    
+    <div class="form-group">
+      <label>Type</label>
+      <input type="text" formControlName="type" placeholder="e.g. Equipment, Staff, Room">
+    </div>
+    
+    <div class="form-group">
+      <label>Availability</label>
+      <select formControlName="availability">
+        <option [value]="true">Available</option>
+        <option [value]="false">Unavailable</option>
+      </select>
+    </div>
+    
+    <button type="submit" class="btn" [disabled]="!itemForm.valid">Add Resource</button>
+  </form>
 
-<form [formGroup]="itemForm"></form>
+  <h3 style="margin-top: 40px;">Resource Inventory</h3>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Available</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let res of resourceList">
+        <td>{{ res.resourceID }}</td>
+        <td>{{ res.name }}</td>
+        <td>{{ res.type }}</td>
+        <td>
+          <span [ngStyle]="{'color': res.availability ? 'green' : 'red', 'font-weight': 'bold'}">
+            {{ res.availability ? 'Yes' : 'No' }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

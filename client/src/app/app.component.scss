@@ -1,0 +1,119 @@
+/* Unique Feature: Glassmorphism Sticky Header */
+.global-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: rgba(15, 23, 42, 0.85); /* Midnight blue with transparency */
+  backdrop-filter: blur(10px); /* Glass effect */
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom Typography Logo */
+.brand-logo {
+  cursor: pointer;
+  display: flex;
+  align-items: baseline;
+  user-select: none;
+
+  .icon {
+    color: var(--accent-gold);
+    font-size: 24px;
+    margin-right: 8px;
+  }
+
+  .brand-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    color: white;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .brand-dot {
+    color: var(--accent-gold);
+    font-size: 28px;
+    font-weight: 800;
+  }
+}
+
+/* Navigation Links */
+.main-nav {
+  display: flex;
+  gap: 30px;
+
+  a {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 8px 0;
+    position: relative;
+    transition: color 0.3s;
+
+    &:hover {
+      color: white;
+    }
+
+    /* Active Link Underline Animation */
+    &.active-link {
+      color: var(--accent-gold);
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: var(--accent-gold);
+        border-radius: 2px;
+      }
+    }
+  }
+}
+
+/* User Actions & Logout */
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  .role-badge {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--accent-gold);
+    border: 1px solid var(--accent-gold);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .logout-btn {
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      background: white;
+      color: var(--primary-dark);
+    }
+  }
+}
+
+.app-content {
+  padding-top: 20px;
+}

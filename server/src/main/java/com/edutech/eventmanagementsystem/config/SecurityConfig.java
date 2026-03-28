@@ -24,7 +24,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
-    // Inject the PasswordEncoder that is already defined in Configurations.java
     @Autowired
     private PasswordEncoder passwordEncoder;
 

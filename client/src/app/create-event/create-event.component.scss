@@ -1,0 +1,31 @@
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  letter-spacing: 0.5px;
+  background-color: var(--text-muted); 
+
+  &.scheduled {
+    background-color: var(--primary-dark); 
+  }
+
+  &.ongoing {
+    background-color: rgba(16, 185, 129, 0.1); 
+    color: var(--success);
+    border: 1px solid var(--success);
+  }
+
+  &.completed {
+    background-color: var(--text-muted); 
+  }
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}

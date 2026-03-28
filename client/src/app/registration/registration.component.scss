@@ -1,0 +1,116 @@
+.registration-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 160px);
+  padding: 20px 0;
+}
+
+.registration-card {
+  background: white;
+  width: 100%;
+  max-width: 450px;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border: 1px solid #eaeaea;
+}
+
+.registration-header {
+  text-align: center;
+  margin-bottom: 25px;
+
+  h2 {
+    color: #0056b3;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: #666;
+    margin: 0;
+  }
+}
+
+.registration-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 15px;
+  background-color: #28a745; // Green to distinguish from the blue login button
+  border: none;
+  transition: background-color 0.2s;
+  
+  &:hover {
+    background-color: #218838;
+  }
+}
+
+.validation-error {
+  color: #dc3545;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.registration-footer {
+  text-align: center;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #eaeaea;
+
+  p {
+    margin: 0;
+    color: #555;
+  }
+
+  a {
+    color: #0056b3;
+    font-weight: 600;
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.registration-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 70px); 
+  margin-top: 70px;
+  
+  /* Animated Premium Background */
+  background: linear-gradient(-45deg, #0f172a, #1e293b, #0f172a, #334155);
+  background-size: 400% 400%;
+  animation: gradient-shift 15s ease infinite;
+  padding: 40px 0; /* Extra padding for smaller screens */
+}
+
+.registration-card {
+  background: white;
+  width: 100%;
+  max-width: 450px;
+  padding: 50px 40px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border: none;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: #10b981; /* Success Green accent for registration */
+  }
+}

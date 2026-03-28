@@ -1,1 +1,60 @@
-<form [formGroup]="itemForm"></form>
+<div class="view-events-wrapper">
+  
+  <div class="search-card">
+    <div class="header-section">
+      <h2>Update Event Setup (Staff)</h2>
+      <p>Search for an event by ID to manage its setup and status.</p>
+    </div>
+
+    <div *ngIf="showMessage" class="alert alert-success">{{ responseMessage }}</div>
+    <div *ngIf="showError" class="alert alert-danger">{{ errorMessage }}</div>
+
+    <div class="search-bar">
+      <input type="number" (input)="formModel.eventID = $any($event.target).value" placeholder="Enter Event ID (e.g., 1)">
+      <button class="btn search-btn" (click)="searchEvent()">Search Event</button>
+    </div>
+  </div>
+
+  <div class="edit-card" *ngIf="isUpdate">
+    <div class="edit-header">
+      <h3>Editing: <span class="highlight">{{ eventObj?.title }}</span></h3>
+    </div>
+    
+    <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" formControlName="title">
+        <div *ngIf="itemForm.get('title')?.invalid && itemForm.get('title')?.touched" class="validation-error">Title is required.</div>
+      </div>
+      
+      <div class="form-group">
+        <label>Description</label>
+        <textarea formControlName="description" rows="3"></textarea>
+        <div *ngIf="itemForm.get('description')?.invalid && itemForm.get('description')?.touched" class="validation-error">Description is required.</div>
+      </div>
+      
+      <div class="form-group">
+        <label>Date & Time</label>
+        <input type="datetime-local" formControlName="dateTime">
+      </div>
+      
+      <div class="form-group">
+        <label>Location</label>
+        <input type="text" formControlName="location">
+      </div>
+      
+      <div class="form-group">
+        <label>Operational Status</label>
+        <select formControlName="status">
+          <option value="SCHEDULED">Scheduled</option>
+          <option value="ONGOING">Ongoing</option>
+          <option value="COMPLETED">Completed</option>
+        </select>
+      </div>
+      
+      <button type="submit" class="btn update-btn" [disabled]="!itemForm.valid">Save Updates</button>
+      <button type="button" class="btn cancel-btn" (click)="isUpdate = false">Cancel</button>
+    </form>
+  </div>
+
+</div>

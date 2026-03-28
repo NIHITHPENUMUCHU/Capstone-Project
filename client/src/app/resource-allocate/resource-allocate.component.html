@@ -1,1 +1,54 @@
-<form [formGroup]="itemForm"></form>
+<div class="allocation-wrapper">
+  <div class="allocation-card">
+    
+    <div class="allocation-header">
+      <h2>Allocate Resources</h2>
+      <p>Assign available equipment or staff to a scheduled event.</p>
+    </div>
+
+    <div *ngIf="showMessage" class="alert alert-success">{{ responseMessage }}</div>
+    <div *ngIf="showError" class="alert alert-danger">{{ errorMessage }}</div>
+    
+    <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+      
+      <div class="form-group">
+        <label>Select Event</label>
+        <select formControlName="eventId">
+          <option value="" disabled selected>-- Choose an Event --</option>
+          <option *ngFor="let ev of eventList" [value]="ev.eventID">
+            {{ ev.title }} ({{ ev.dateTime | date:'shortDate' }})
+          </option>
+        </select>
+        <div *ngIf="itemForm.get('eventId')?.invalid && itemForm.get('eventId')?.touched" class="validation-error">
+          Please select an event.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Select Resource</label>
+        <select formControlName="resourceId">
+          <option value="" disabled selected>-- Choose a Resource --</option>
+          <ng-container *ngFor="let res of resourceList">
+            <option *ngIf="res.availability" [value]="res.resourceID">
+              {{ res.name }} ({{ res.type }})
+            </option>
+          </ng-container>
+        </select>
+        <div *ngIf="itemForm.get('resourceId')?.invalid && itemForm.get('resourceId')?.touched" class="validation-error">
+          Please select an available resource.
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Quantity</label>
+        <input type="number" formControlName="quantity" placeholder="e.g. 10">
+        <div *ngIf="itemForm.get('quantity')?.invalid && itemForm.get('quantity')?.touched" class="validation-error">
+          Quantity is required and must be at least 1.
+        </div>
+      </div>
+      
+      <button type="submit" class="btn allocation-btn" [disabled]="!itemForm.valid">Allocate Resource</button>
+    </form>
+    
+  </div>
+</div>

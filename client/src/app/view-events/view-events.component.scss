@@ -1,0 +1,45 @@
+.view-events-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+}
+
+.search-card, .edit-card {
+  background: var(--card-bg);
+  width: 100%;
+  max-width: 600px;
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid #eaeaea;
+}
+
+.header-section {
+  margin-bottom: 20px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 15px;
+  
+  h2 { color: var(--primary-dark); margin: 0 0 5px 0; }
+  p { color: var(--text-muted); margin: 0; }
+}
+
+.search-bar {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.edit-header h3 {
+  margin: 0;
+  color: var(--text-main);
+  
+  .highlight { color: var(--accent-gold); }
+}
+
+.cancel-btn {
+  background-color: var(--text-muted);
+  margin-left: 15px;
+  &:hover { background-color: var(--primary-dark); }
+}
+
+.validation-error { color: var(--danger); font-size: 13px; margin-top: 5px; }

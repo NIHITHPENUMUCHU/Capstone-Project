@@ -1,3 +1,39 @@
-<div class="row text-center">
-<h1 class="text-capitalize">Event Management System</h1>
+<div class="container dashboard-container">
+  
+  <div class="row text-center welcome-banner">
+    <h1 class="text-capitalize">Event Management System</h1>
+    <p>Welcome back! You are logged in as an authorized <strong>{{ roleName }}</strong>.</p>
+  </div>
+
+  <div class="dashboard-grid" *ngIf="roleName === 'PLANNER'">
+    <div class="dash-card" routerLink="/create-event">
+      <h3>Manage Events</h3>
+      <p>Create, view, and schedule new events in the system.</p>
+    </div>
+    
+    <div class="dash-card" routerLink="/add-resource">
+      <h3>Manage Resources</h3>
+      <p>Add equipment, staff, or rooms to the global inventory.</p>
+    </div>
+
+    <div class="dash-card" routerLink="/resource-allocate">
+      <h3>Allocate Resources</h3>
+      <p>Assign your available resources to specific scheduled events.</p>
+    </div>
+  </div>
+
+  <div class="dashboard-grid" *ngIf="roleName === 'STAFF'">
+    <div class="dash-card" routerLink="/view-events">
+      <h3>Update Event Setup</h3>
+      <p>Search for an assigned event and update its operational status.</p>
+    </div>
+  </div>
+
+  <div class="dashboard-grid" *ngIf="roleName === 'CLIENT'">
+    <div class="dash-card" routerLink="/booking-details">
+      <h3>View Booking Details</h3>
+      <p>Check the schedule, location, and status of your booked events.</p>
+    </div>
+  </div>
+
 </div>

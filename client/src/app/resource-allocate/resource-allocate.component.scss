@@ -1,0 +1,36 @@
+.allocation-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.allocation-card {
+  background: var(--card-bg);
+  width: 100%;
+  max-width: 550px;
+  padding: 40px;
+  border-radius: 12px;
+  border: 1px solid #eaeaea;
+}
+
+.allocation-header {
+  margin-bottom: 25px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 15px;
+
+  h2 {
+    color: var(--primary-dark);
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+  p {
+    color: var(--text-muted);
+    margin: 0;
+  }
+}
+
+.validation-error {
+  color: var(--danger);
+  font-size: 13px;
+  margin-top: 5px;
+}

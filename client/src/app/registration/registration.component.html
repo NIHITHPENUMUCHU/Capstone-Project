@@ -1,1 +1,62 @@
-<form [formGroup]="itemForm"></form>
+<div class="registration-wrapper">
+  <div class="registration-card">
+    
+    <div class="registration-header">
+      <h2>Create an Account</h2>
+      <p>Join the Event Management Platform</p>
+    </div>
+
+    <div *ngIf="showMessage" class="alert alert-success">{{ responseMessage }}</div>
+    <div *ngIf="showError" class="alert alert-danger">{{ errorMessage }}</div>
+    
+    <form [formGroup]="itemForm" (ngSubmit)="onRegister()">
+      
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" formControlName="username" placeholder="Choose a username">
+        <div *ngIf="itemForm.get('username')?.invalid && itemForm.get('username')?.touched" class="validation-error">
+          Username is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" formControlName="email" placeholder="Enter your email">
+        <div *ngIf="itemForm.get('email')?.errors?.['required'] && itemForm.get('email')?.touched" class="validation-error">
+          Email is required.
+        </div>
+        <div *ngIf="itemForm.get('email')?.errors?.['email'] && itemForm.get('email')?.touched" class="validation-error">
+          Please enter a valid email format.
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" formControlName="password" placeholder="Create a password">
+        <div *ngIf="itemForm.get('password')?.invalid && itemForm.get('password')?.touched" class="validation-error">
+          Password is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Select Role</label>
+        <select formControlName="role">
+          <option [ngValue]="null" disabled>-- Choose a Role --</option>
+          <option value="PLANNER">Event Planner</option>
+          <option value="STAFF">Venue Staff</option>
+          <option value="CLIENT">Client</option>
+        </select>
+        <div *ngIf="itemForm.get('role')?.invalid && itemForm.get('role')?.touched" class="validation-error">
+          Please select a role.
+        </div>
+      </div>
+      
+      <button type="submit" class="btn registration-btn">Register</button>
+    </form>
+    
+    <div class="registration-footer">
+      <p>Already have an account? <a routerLink="/login">Log in here</a></p>
+    </div>
+
+  </div>
+</div>
