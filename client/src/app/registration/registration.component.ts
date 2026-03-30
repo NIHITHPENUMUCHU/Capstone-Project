@@ -10,24 +10,20 @@ import { Router } from '@angular/router';
 })
 export class RegistrationComponent implements OnInit {
   
-  // Variables strictly matching the Capstone Document (File 11)
   itemForm!: FormGroup; 
   formModel: any = { role: null, email: '', password: '', username: '' }; 
   showMessage: boolean = false; 
   responseMessage: any;
-  
-  // Adding error handling variables for a better user experience
   showError: boolean = false;
   errorMessage: any;
 
   constructor(
     public router: Router, 
-    public bookService: HttpService, // Required by doc to be named 'bookService' here
+    public bookService: HttpService, 
     private formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {
-    // Exactly 4 controls with strict validators required by Test Cases 34, 35, and 36
     this.itemForm = this.formBuilder.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -43,7 +39,6 @@ export class RegistrationComponent implements OnInit {
           this.showMessage = true;
           this.responseMessage = "Registration Successful! You can now log in.";
           this.showError = false;
-          
           this.itemForm.reset();
         },
         (error: any) => {
@@ -53,7 +48,6 @@ export class RegistrationComponent implements OnInit {
         }
       );
     } else {
-      // Required by Document: Marks all controls as touched to show validation errors if the form is invalid
       this.itemForm.markAllAsTouched();
     }
   }

@@ -1,119 +1,144 @@
-// @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;500;600&display=swap');
+/* ==========================================================================
+   1. IMPORT FONTS
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;500;600&display=swap');
 
-// :root {
-//   --primary-dark: #121212;     /* Deep Charcoal */
-//   --accent-main: #7c3aed;      /* Royal Purple */
-//   --accent-hover: #6d28d9;
-//   --bg-color: #0f172a;         /* Dark Slate */
-//   --card-bg: rgba(30, 41, 59, 0.6); /* Glassmorphism Base */
-//   --text-main: #f8fafc;        /* White/Silver text */
-//   --text-muted: #94a3b8;
-//   --success: #10b981;          /* Emerald Green */
-//   --danger: #ef4444;
-// }
+/* ==========================================================================
+   2. GLOBAL THEME VARIABLES
+   ========================================================================== */
+:root {
+  --primary-dark: #121212;     /* Deep Charcoal */
+  --accent-main: #7c3aed;      /* Royal Purple */
+  --accent-hover: #6d28d9;
+  --bg-color: #0f172a;         /* Dark Slate */
+  --card-bg: rgba(30, 41, 59, 0.6); 
+  --text-main: #f8fafc;        
+  --text-muted: #94a3b8;
+  --success: #10b981;          /* Emerald Green */
+  --danger: #ef4444;           /* Ruby Red */
+}
 
-// body {
-//   font-family: 'Inter', sans-serif;
-//   background-color: var(--bg-color);
-//   color: var(--text-main);
-//   margin: 0;
-//   padding: 0;
-//   min-height: 100vh;
-// }
+/* ==========================================================================
+   3. BASE RESETS & TYPOGRAPHY
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
-// h1, h2, h3, h4, h5 {
-//   font-family: 'Montserrat', sans-serif;
-//   color: var(--text-main);
-// }
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  /* CRITICAL: Removes the default white border around the screen */
+  margin: 0; 
+  padding: 0;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
 
-// /* Glassmorphism Cards */
-// .container, .data-table td {
-//   background: var(--card-bg);
-//   backdrop-filter: blur(12px);
-//   -webkit-backdrop-filter: blur(12px);
-//   border: 1px solid rgba(255, 255, 255, 0.05);
-//   border-radius: 12px;
-//   color: var(--text-main);
-// }
+h1, h2, h3, h4, h5 {
+  font-family: 'Montserrat', sans-serif;
+  color: var(--text-main);
+  margin-top: 0;
+}
 
-// /* Form Styling for Dark Mode */
-// .form-group label { color: var(--text-muted); }
-// .form-group input, .form-group select, .form-group textarea {
-//   background-color: rgba(15, 23, 42, 0.8);
-//   border: 1px solid rgba(255, 255, 255, 0.1);
-//   color: white;
-// }
-// .form-group input:focus, .form-group select:focus {
-//   border-color: var(--accent-main);
-//   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2) !important;
-// }
+/* ==========================================================================
+   4. GLOBAL BUTTON COMPONENTS
+   ========================================================================== */
+.btn {
+  background-color: var(--accent-main);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  
+  &:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(124, 58, 237, 0.3);
+  }
 
-// /* Royal Purple Buttons */
-// .btn {
-//   background-color: var(--accent-main);
-//   color: white;
-//   padding: 12px 24px;
-//   border-radius: 8px;
-//   border: none;
-//   font-weight: 600;
-//   transition: all 0.3s ease;
-//   cursor: pointer;
-// }
-// .btn:hover {
-//   background-color: var(--accent-hover);
-//   transform: translateY(-2px);
-//   box-shadow: 0 8px 15px rgba(124, 58, 237, 0.3);
-// }
+  &:disabled {
+    background-color: #334155;
+    color: #64748b;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}
 
-// /* --- ANIMATIONS (No external libraries needed!) --- */
-// @keyframes slideUpFade {
-//   from { opacity: 0; transform: translateY(40px); }
-//   to { opacity: 1; transform: translateY(0); }
-// }
-
-// .animate-slide-up {
-//   animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-// }
-
-// /* Staggered Grid Animation */
-// .dashboard-grid .dash-card:nth-child(1) { animation: slideUpFade 0.5s ease forwards; }
-// .dashboard-grid .dash-card:nth-child(2) { animation: slideUpFade 0.7s ease forwards; }
-// .dashboard-grid .dash-card:nth-child(3) { animation: slideUpFade 0.9s ease forwards; }
-
-
-
-/* Global Form Elements - Dark Theme */
-.form-group {
+/* ==========================================================================
+   5. GLOBAL ALERT MESSAGES
+   ========================================================================== */
+.alert {
+  padding: 15px;
+  border-radius: 8px;
   margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
+  font-size: 14px;
+  font-weight: 500;
 
-  label { 
-    color: var(--text-muted, #94a3b8); 
-    margin-bottom: 8px;
-    font-size: 14px;
-    font-weight: 600;
+  &-success {
+    background-color: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+    border: 1px solid rgba(16, 185, 129, 0.3);
   }
 
-  input, select, textarea {
-    background-color: rgba(15, 23, 42, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-    padding: 12px 15px;
-    border-radius: 8px;
-    font-size: 15px;
-    font-family: 'Inter', sans-serif;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-    &::placeholder {
-      color: #64748b;
-    }
-
-    &:focus {
-      outline: none;
-      border-color: var(--accent-main, #7c3aed);
-      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2) !important;
-      transform: translateY(-2px);
-    }
+  &-danger {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.3);
   }
+}
+
+/* ==========================================================================
+   6. GLOBAL ANIMATION ENGINE
+   ========================================================================== */
+/* The Smooth Slide Up */
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+  opacity: 0; /* Ensures elements are invisible before animation starts */
+  animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* The Live Pulsing Dot (Used for ONGOING events) */
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.live-pulse {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: var(--success);
+  border-radius: 50%;
+  animation: pulse-ring 2s infinite;
+  margin-right: 8px;
+}
+
+/* ==========================================================================
+   7. PREMIUM CUSTOM SCROLLBARS
+   ========================================================================== */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }

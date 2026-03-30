@@ -1,72 +1,84 @@
-<div class="container">
-    <h2>Create New Event</h2>
+<div class="workspace-layout animate-slide-up">
+  
+  <div class="glass-panel form-panel">
+    <div class="panel-header">
+      <div class="header-icon">✨</div>
+      <div class="header-text">
+        <h2>Draft Event</h2>
+        <p>Configure new event parameters</p>
+      </div>
+    </div>
 
     <div *ngIf="showMessage" class="alert alert-success">{{ responseMessage }}</div>
     <div *ngIf="showError" class="alert alert-danger">{{ errorMessage }}</div>
 
     <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-            <label>Event Title</label>
-            <input type="text" formControlName="title" placeholder="e.g. Annual Tech Conference">
+      <div class="form-group">
+        <label>Event Title</label>
+        <div class="input-wrapper">
+          <input type="text" formControlName="title" placeholder="e.g. Annual Tech Summit">
         </div>
+      </div>
 
-        <div class="form-group">
-            <label>Description</label>
-            <textarea formControlName="description" rows="3" placeholder="Details about the event..."></textarea>
+      <div class="form-group">
+        <label>Date & Time</label>
+        <div class="input-wrapper">
+          <input type="datetime-local" formControlName="dateTime">
         </div>
+      </div>
 
-        <div class="form-group">
-            <label>Date & Time</label>
-            <input type="datetime-local" formControlName="dateTime">
+      <div class="form-group">
+        <label>Location</label>
+        <div class="input-wrapper">
+          <input type="text" formControlName="location" placeholder="e.g. Main Auditorium">
         </div>
+      </div>
 
-        <div class="form-group">
-            <label>Location</label>
-            <input type="text" formControlName="location" placeholder="e.g. Main Auditorium">
-        </div>
-
-        <div class="form-group">
-            <label>Status</label>
-            <select formControlName="status">
-                <option value="" disabled selected>Select a Status</option>
-                <option value="SCHEDULED">Scheduled</option>
-                <option value="ONGOING">Ongoing</option>
-                <option value="COMPLETED">Completed</option>
-            </select>
-        </div>
-
-        <button type="submit" class="btn" [disabled]="!itemForm.valid">Create Event</button>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea formControlName="description" rows="3" placeholder="Provide event details..."></textarea>
+      </div>
+      
+      <button type="submit" class="btn submit-btn" [disabled]="!itemForm.valid">Launch Event</button>
     </form>
+  </div>
 
-    <h3 style="margin-top: 40px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px;">All Events</h3>
-    <table class="data-table">
+  <div class="glass-panel table-panel" style="animation-delay: 0.2s;">
+    <div class="panel-header">
+      <div class="header-icon">📡</div>
+      <div class="header-text">
+        <h2>Live Event Registry</h2>
+        <p>Real-time overview of all scheduled and active events.</p>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table class="modern-table">
         <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Date & Time</th>
-                <th>Location</th>
-                <th>Status</th>
-            </tr>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Schedule</th>
+            <th>Location</th>
+            <th>Status</th>
+          </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let ev of eventList">
-                <td>{{ ev.eventID }}</td>
-                <td><strong>{{ ev.title }}</strong></td>
-                <td>{{ ev.dateTime | date:'short' }}</td>
-                <td>{{ ev.location }}</td>
-                <td>
-                    <span class="status-badge"
-                        [ngClass]="{'scheduled': ev.status === 'SCHEDULED', 'ongoing': ev.status === 'ONGOING', 'completed': ev.status === 'COMPLETED'}">
-                        <span *ngIf="ev.status === 'ONGOING'" class="live-pulse"></span>
-                        {{ ev.status }}
-                    </span>
-                </td>
-            </tr>
-            <tr *ngIf="eventList.length === 0">
-                <td colspan="5" style="text-align: center; color: #777; padding: 20px;">No events found. Create one
-                    above!</td>
-            </tr>
+          <tr *ngFor="let ev of eventList">
+            <td class="id-cell">#{{ ev.eventID || ev.id }}</td>
+            <td class="fw-bold text-white">{{ ev.title }}</td>
+            <td class="text-muted">{{ ev.dateTime | date:'MMM d, y, h:mm a' }}</td>
+            <td><span class="location-tag">{{ ev.location }}</span></td>
+            <td>
+              <span class="status-badge" [ngClass]="ev.status | lowercase">
+                <span *ngIf="ev.status === 'ONGOING'" class="live-pulse"></span>
+                {{ ev.status }}
+              </span>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
+    </div>
+  </div>
+
 </div>

@@ -5,6 +5,7 @@ import com.edutech.eventmanagementsystem.dto.LoginResponse;
 import com.edutech.eventmanagementsystem.entity.User;
 import com.edutech.eventmanagementsystem.jwt.JwtUtil;
 import com.edutech.eventmanagementsystem.service.UserService;
+import com.edutech.eventmanagementsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,10 @@ public class RegisterAndLoginController {
 
     @Autowired
     private UserService userService;
+
+    // Autowired the UserRepository so we can fetch the user's role
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -46,6 +51,12 @@ public class RegisterAndLoginController {
 
         final UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
-        return ResponseEntity.ok(new LoginResponse(jwt));
+        
+        // CRITICAL FIX: Fetch the user from the database to get their true role
+        // Since authentication succeeded above, we know this user exists, so .get() is safe to use.
+        User loggedInUser = userRepository.findByUsername(loginRequest.getUsername()).get();
+
+        // Return the JWT token AND the role back to Angular
+        return ResponseEntity.ok(new LoginResponse(jwt, loggedInUser.getRole()));
     }
 }

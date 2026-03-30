@@ -1,19 +1,19 @@
-/* Unique Feature: Glassmorphism Sticky Header */
+/* Premium Glassmorphism Sticky Header */
 .global-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 70px;
-  background: rgba(15, 23, 42, 0.85); /* Midnight blue with transparency */
-  backdrop-filter: blur(10px); /* Glass effect */
-  -webkit-backdrop-filter: blur(10px);
+  height: 75px;
+  background: rgba(18, 18, 18, 0.85); /* Deep dark background */
+  backdrop-filter: blur(12px); /* Frosted glass effect */
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 40px;
-  z-index: 1000;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Stays on top of everything */
 }
 
 /* Custom Typography Logo */
@@ -22,9 +22,14 @@
   display: flex;
   align-items: baseline;
   user-select: none;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.02);
+  }
 
   .icon {
-    color: var(--accent-gold);
+    color: #7c3aed; /* Royal Purple Accent */
     font-size: 24px;
     margin-right: 8px;
   }
@@ -32,14 +37,13 @@
   .brand-text {
     font-family: 'Montserrat', sans-serif;
     font-weight: 800;
-    font-size: 24px;
-    color: white;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    font-size: 22px;
+    color: #ffffff;
+    letter-spacing: 0.5px;
   }
 
   .brand-dot {
-    color: var(--accent-gold);
+    color: #7c3aed;
     font-size: 28px;
     font-weight: 800;
   }
@@ -51,30 +55,31 @@
   gap: 30px;
 
   a {
-    color: #cbd5e1;
+    color: #94a3b8; /* Muted slate text */
     text-decoration: none;
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 600;
     padding: 8px 0;
     position: relative;
     transition: color 0.3s;
 
     &:hover {
-      color: white;
+      color: #ffffff;
     }
 
     /* Active Link Underline Animation */
     &.active-link {
-      color: var(--accent-gold);
+      color: #ffffff;
+      
       &::after {
         content: '';
         position: absolute;
-        bottom: 0;
+        bottom: -4px;
         left: 0;
         width: 100%;
-        height: 2px;
-        background-color: var(--accent-gold);
-        border-radius: 2px;
+        height: 3px;
+        background-color: #7c3aed; /* Royal Purple */
+        border-radius: 3px;
       }
     }
   }
@@ -87,10 +92,10 @@
   gap: 20px;
 
   .role-badge {
-    background: rgba(245, 158, 11, 0.2);
-    color: var(--accent-gold);
-    border: 1px solid var(--accent-gold);
-    padding: 4px 12px;
+    background: rgba(124, 58, 237, 0.15);
+    color: #a78bfa; /* Lighter purple text */
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    padding: 6px 14px;
     border-radius: 20px;
     font-size: 12px;
     font-weight: 700;
@@ -99,21 +104,36 @@
 
   .logout-btn {
     background: transparent;
-    color: white;
-    border: 1px solid rgba(255,255,255,0.3);
-    padding: 8px 16px;
-    border-radius: 6px;
+    color: #cbd5e1;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 18px;
+    border-radius: 8px;
     font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
 
     &:hover {
-      background: white;
-      color: var(--primary-dark);
+      background: #ffffff;
+      color: #121212;
+      border-color: #ffffff;
     }
   }
 }
 
+/* Mobile Responsiveness for Header */
+@media (max-width: 900px) {
+  .global-header {
+    padding: 0 20px;
+  }
+  .main-nav {
+    display: none; /* Consider adding a hamburger menu here later if needed */
+  }
+}
+
+/* Prevents the router outlet content from hugging the exact top edge */
 .app-content {
-  padding-top: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }

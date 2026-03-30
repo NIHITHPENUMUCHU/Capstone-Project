@@ -1,25 +1,46 @@
-<div class="container">
-    <h2>View Booking Details</h2>
-
-    <div class="form-group" style="display: flex; gap: 10px; flex-direction: row;">
-        <input type="number" (input)="formModel.eventID = $any($event.target).value" placeholder="Enter Event ID"
-            style="flex: 1;">
-        <button class="btn" style="margin-top: 0;" (click)="searchEvent()">Search</button>
+<div class="page-wrapper animate-slide-up">
+  
+  <div class="content-card search-card">
+    <div class="section-header">
+      <h2>My Bookings</h2>
+      <p>Enter your Booking/Event ID to view the latest details and status.</p>
     </div>
 
     <div *ngIf="showError" class="alert alert-danger">{{ errorMessage }}</div>
 
-    <div *ngFor="let item of scores$" class="booking-card">
-        <h3>{{ item.title }}</h3>
-        <p><strong>Description:</strong> {{ item.description }}</p>
-        <p><strong>Location:</strong> {{ item.location }}</p>
-        <p><strong>Date & Time:</strong> {{ item.dateTime | date:'medium' }}</p>
-        <p>
-            <strong>Status:</strong>
-            <span class="badge" [ngClass]="{'ongoing': item.status === 'ONGOING'}">
-                <span *ngIf="item.status === 'ONGOING'" class="live-pulse"></span>
-                {{ item.status }}
-            </span>
-        </p>
+    <div class="search-bar">
+      <input type="number" (input)="formModel.eventID = $any($event.target).value" placeholder="Enter Event ID (e.g., 1)">
+      <button class="btn search-btn" (click)="searchEvent()">Search Booking</button>
     </div>
+  </div>
+
+  <div *ngFor="let item of scores$" class="content-card booking-card animate-slide-up" style="animation-delay: 0.1s;">
+    
+    <div class="booking-header">
+      <h3>{{ item.title }}</h3>
+      <span class="status-badge" [ngClass]="item.status | lowercase">
+        <span *ngIf="item.status === 'ONGOING'" class="live-pulse"></span>
+        {{ item.status }}
+      </span>
+    </div>
+
+    <div class="booking-info">
+      <div class="info-row">
+        <strong>Description:</strong> 
+        <span>{{ item.description }}</span>
+      </div>
+      
+      <div class="info-row">
+        <strong>Location:</strong> 
+        <span>{{ item.location }}</span>
+      </div>
+      
+      <div class="info-row">
+        <strong>Date & Time:</strong> 
+        <span>{{ item.dateTime | date:'medium' }}</span>
+      </div>
+    </div>
+
+  </div>
+
 </div>

@@ -11,17 +11,16 @@ import { AuthService } from '../../services/auth.service';
 })
 export class BookingDetailsComponent implements OnInit {
   
-  // Variables strictly matching the Capstone Document
   formModel: any = { status: null, eventID: null }; 
   showError: boolean = false; 
-  errorMessage: any; 
+  errorMessage: string = ''; 
   eventObj: any = []; 
   assignModel: any = {}; 
-  showMessage: any; 
-  responseMessage: any; 
-  isUpdate: any = false;
+  showMessage: boolean = false; 
+  responseMessage: string = ''; 
+  isUpdate: boolean = false;
 
-  // Added to strictly satisfy the File 6 HTML *ngFor requirement
+  // Satisfies the strict HTML *ngFor requirement
   scores$: any = []; 
 
   constructor(
@@ -32,7 +31,6 @@ export class BookingDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Lifecycle hook called after component initialization (Reserved for future use)
   }
 
   searchEvent(): void {
@@ -40,9 +38,8 @@ export class BookingDetailsComponent implements OnInit {
       this.httpService.getBookingDetails(this.formModel.eventID).subscribe(
         (data: any) => {
           if (data) {
-            // Wrapping the object in an array to allow *ngFor iteration
             this.eventObj = [data]; 
-            this.scores$ = [data]; // Satisfies the strict 'scores$' requirement
+            this.scores$ = [data]; 
             this.showError = false;
           } else {
             this.showError = true;

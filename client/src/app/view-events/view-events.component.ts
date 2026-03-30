@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../services/http.service';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-events',
@@ -11,26 +9,22 @@ import { Router } from '@angular/router';
 })
 export class ViewEventsComponent implements OnInit {
   
-  // Variables strictly matching the Capstone Document
   itemForm!: FormGroup;  
-  formModel: any = { status: null, eventID: null }; 
+  formModel: any = { eventID: null }; 
   showError: boolean = false; 
-  errorMessage: any; 
+  errorMessage: string = ''; 
   eventObj: any = {}; 
-  assignModel: any = {};
   showMessage: boolean = false; 
-  responseMessage: any; 
+  responseMessage: string = ''; 
   isUpdate: boolean = false;
 
   constructor(
-    public router: Router, 
     public httpService: HttpService, 
-    private formBuilder: FormBuilder, 
-    private authService: AuthService
+    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {
-    // Exactly 5 controls required by the automated test cases (Test 38, 39)
+    // 5 strict controls required for updating an event
     this.itemForm = this.formBuilder.group({
       title: ['', Validators.required],
       description: ['', Validators.required],

@@ -1,12 +1,13 @@
 <header class="global-header">
   
-  <div class="brand-logo" routerLink="/dashboard">
+  <div class="brand-logo" [routerLink]="IsLoggin ? '/dashboard' : '/login'">
     <span class="icon">✧</span>
-    <span class="brand-text">Lumina</span><span class="brand-dot">.</span>
+    <span class="brand-text">EventMaster</span><span class="brand-dot">.</span>
   </div>
   
   <ng-container *ngIf="IsLoggin">
     <nav class="main-nav">
+      
       <ng-container *ngIf="roleName === 'PLANNER'">
         <a routerLink="/create-event" routerLinkActive="active-link">Events</a>
         <a routerLink="/add-resource" routerLinkActive="active-link">Resources</a>
@@ -20,13 +21,12 @@
       <ng-container *ngIf="roleName === 'CLIENT'">
         <a routerLink="/booking-details" routerLinkActive="active-link">My Bookings</a>
       </ng-container>
+      
     </nav>
 
     <div class="user-actions">
       <div class="role-badge">{{ roleName }}</div>
-      <button class="logout-btn" (click)="logout()">
-        Log Out
-      </button>
+      <button class="logout-btn" (click)="logout()">Log Out</button>
     </div>
   </ng-container>
 

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../services/http.service';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-resource-allocate',
@@ -11,26 +9,22 @@ import { Router } from '@angular/router';
 })
 export class ResourceAllocateComponent implements OnInit {
   
-  // Variables strictly matching the Capstone Document
   itemForm!: FormGroup;  
-  formModel: any = { status: null }; 
   showError: boolean = false; 
-  errorMessage: any; 
-  resourceList: any = []; 
-  assignModel: any = {}; 
+  errorMessage: string = ''; 
   showMessage: boolean = false; 
-  responseMessage: any; 
-  eventList: any = [];
+  responseMessage: string = ''; 
+  
+  resourceList: any[] = []; 
+  eventList: any[] = [];
 
   constructor(
-    public router: Router, 
-    public httpService: HttpService, 
     private formBuilder: FormBuilder, 
-    private authService: AuthService
+    public httpService: HttpService
   ) { }
 
   ngOnInit(): void {
-    // 3 controls required: eventId, resourceId, and quantity (Test Case 37)
+    // 3 strict controls required for allocation
     this.itemForm = this.formBuilder.group({
       eventId: ['', Validators.required],
       resourceId: ['', Validators.required],
@@ -44,23 +38,15 @@ export class ResourceAllocateComponent implements OnInit {
 
   getEvent(): void {
     this.httpService.GetAllevents().subscribe(
-      (data: any) => {
-        this.eventList = data;
-      },
-      (error: any) => {
-        console.error("Failed to fetch events", error);
-      }
+      (data: any) => { this.eventList = data; },
+      (error: any) => { console.error("Failed to fetch events", error); }
     );
   }
 
   getResources(): void {
     this.httpService.GetAllResources().subscribe(
-      (data: any) => {
-        this.resourceList = data;
-      },
-      (error: any) => {
-        console.error("Failed to fetch resources", error);
-      }
+      (data: any) => { this.resourceList = data; },
+      (error: any) => { console.error("Failed to fetch resources", error); }
     );
   }
 
@@ -68,18 +54,14 @@ export class ResourceAllocateComponent implements OnInit {
     if (this.itemForm.valid) {
       const formValues = this.itemForm.value;
       
-      // HttpService expects (eventId, resourceId, details)
       this.httpService.allocateResources(formValues.eventId, formValues.resourceId, formValues).subscribe(
         (res: any) => {
           this.showMessage = true;
           this.responseMessage = "Resource successfully allocated to the event!";
           this.showError = false;
           
-          // Reset form and refresh dropdowns to update resource availability
           this.itemForm.reset();
-          this.getResources(); 
-          
-          console.log(this.responseMessage);
+          this.getResources(); // Refresh resources in case availability changed
         },
         (error: any) => {
           this.showError = true;

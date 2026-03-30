@@ -28,17 +28,14 @@ export class CreateEventComponent implements OnInit {
     private authService: AuthService
   ) { }
 
-  ngOnInit(): void {
-    // Exactly 5 form controls required by the tests
+    ngOnInit(): void {
     this.itemForm = this.formBuilder.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
       dateTime: ['', Validators.required],
       location: ['', Validators.required],
-      status: ['', Validators.required]
+      status: ['SCHEDULED', Validators.required]
     });
-    
-    // Fetch events when the component loads
     this.getEvent();
   }
 
@@ -62,16 +59,17 @@ export class CreateEventComponent implements OnInit {
           this.showMessage = true;
           this.responseMessage = "Event created successfully!";
           this.showError = false;
-          
-          this.itemForm.reset();
-          this.getEvent(); // Refresh the table
+          this.itemForm.reset({ status: 'SCHEDULED' });
+          this.getEvent();
         },
         (error: any) => {
           this.showError = true;
-          this.errorMessage = "Failed to create event. Please verify all inputs.";
+          this.errorMessage = "Failed to create event. Please try again.";
           this.showMessage = false;
         }
       );
+    } else {
+      this.itemForm.markAllAsTouched();
     }
   }
 }

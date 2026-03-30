@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   
-  // Variables strictly matching the Capstone Document
   itemForm!: FormGroup; 
   formModel: any = {}; 
   showError: boolean = false; 
@@ -25,7 +24,6 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Both fields must be required to pass test cases 31, 32, and 33
     this.itemForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -36,19 +34,13 @@ export class LoginComponent implements OnInit {
     if (this.itemForm.valid) {
       this.httpService.Login(this.itemForm.value).subscribe(
         (res: any) => {
-          // Save token and role to local storage via AuthService
           this.authService.saveToken(res.token);
           this.authService.SetRole(res.role || 'CLIENT'); 
-          
           this.showError = false;
           
-          // Redirect to the dashboard
-          this.router.navigate(['/dashboard']);
-          
-          // Slight delay to ensure routing completes before the mandated page reload
-          setTimeout(() => { 
-            window.location.reload(); 
-          }, 100);
+          this.router.navigate(['/dashboard']).then(() => {
+            window.location.reload();
+          });
         },
         (error: any) => {
           this.showError = true;
@@ -56,7 +48,6 @@ export class LoginComponent implements OnInit {
         }
       );
     } else {
-      // Mark all controls as touched to trigger validation messages in the UI
       this.itemForm.markAllAsTouched();
     }
   }
