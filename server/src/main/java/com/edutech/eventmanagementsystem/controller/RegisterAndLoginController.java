@@ -26,7 +26,6 @@ public class RegisterAndLoginController {
     @Autowired
     private UserService userService;
 
-    // Autowired the UserRepository so we can fetch the user's role
     @Autowired
     private UserRepository userRepository;
 
@@ -45,18 +44,14 @@ public class RegisterAndLoginController {
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
             );
         } catch (BadCredentialsException e) {
-            // REQUIRED FOR TEST CASE 6
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect username or password");
         }
 
         final UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
         
-        // CRITICAL FIX: Fetch the user from the database to get their true role
-        // Since authentication succeeded above, we know this user exists, so .get() is safe to use.
         User loggedInUser = userRepository.findByUsername(loginRequest.getUsername()).get();
 
-        // Return the JWT token AND the role back to Angular
         return ResponseEntity.ok(new LoginResponse(jwt, loggedInUser.getRole()));
     }
 }

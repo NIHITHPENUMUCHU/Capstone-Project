@@ -1,139 +1,35 @@
-/* Premium Glassmorphism Sticky Header */
 .global-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 75px;
-  background: rgba(18, 18, 18, 0.85); /* Deep dark background */
-  backdrop-filter: blur(12px); /* Frosted glass effect */
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 40px;
-  z-index: 1000; /* Stays on top of everything */
+  position: fixed; top: 0; left: 0; right: 0; height: 70px;
+  background: #ffffff; /* Crisp white */
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Subtle shadow */
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; z-index: 1000;
 }
 
-/* Custom Typography Logo */
 .brand-logo {
-  cursor: pointer;
-  display: flex;
-  align-items: baseline;
-  user-select: none;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: scale(1.02);
-  }
-
-  .icon {
-    color: #7c3aed; /* Royal Purple Accent */
-    font-size: 24px;
-    margin-right: 8px;
-  }
-
-  .brand-text {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 800;
-    font-size: 22px;
-    color: #ffffff;
-    letter-spacing: 0.5px;
-  }
-
-  .brand-dot {
-    color: #7c3aed;
-    font-size: 28px;
-    font-weight: 800;
-  }
+  cursor: pointer; display: flex; align-items: baseline; user-select: none;
+  .icon { color: var(--accent-main); font-size: 24px; margin-right: 8px; }
+  .brand-text { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 20px; color: var(--primary-dark); }
+  .brand-dot { color: var(--accent-main); font-size: 28px; font-weight: 800; }
 }
 
-/* Navigation Links */
 .main-nav {
-  display: flex;
-  gap: 30px;
-
+  display: flex; gap: 30px;
   a {
-    color: #94a3b8; /* Muted slate text */
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: 600;
-    padding: 8px 0;
-    position: relative;
-    transition: color 0.3s;
-
-    &:hover {
-      color: #ffffff;
-    }
-
-    /* Active Link Underline Animation */
+    color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 600; padding: 8px 0; position: relative; transition: color 0.2s;
+    &:hover { color: var(--primary-dark); }
     &.active-link {
-      color: #ffffff;
-      
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: -4px;
-        left: 0;
-        width: 100%;
-        height: 3px;
-        background-color: #7c3aed; /* Royal Purple */
-        border-radius: 3px;
-      }
+      color: var(--accent-main);
+      &::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px; background-color: var(--accent-main); border-radius: 2px; }
     }
   }
 }
 
-/* User Actions & Logout */
 .user-actions {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-
-  .role-badge {
-    background: rgba(124, 58, 237, 0.15);
-    color: #a78bfa; /* Lighter purple text */
-    border: 1px solid rgba(124, 58, 237, 0.3);
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-  }
-
-  .logout-btn {
-    background: transparent;
-    color: #cbd5e1;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 8px 18px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-      background: #ffffff;
-      color: #121212;
-      border-color: #ffffff;
-    }
-  }
+  display: flex; align-items: center; gap: 20px;
+  .role-badge { background: #e0e7ff; color: #3730a3; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; }
+  .logout-btn { background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); padding: 6px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; &:hover { background: #f1f5f9; color: var(--primary-dark); } }
 }
 
-/* Mobile Responsiveness for Header */
-@media (max-width: 900px) {
-  .global-header {
-    padding: 0 20px;
-  }
-  .main-nav {
-    display: none; /* Consider adding a hamburger menu here later if needed */
-  }
-}
-
-/* Prevents the router outlet content from hugging the exact top edge */
-.app-content {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+.app-content { min-height: 100vh; display: flex; flex-direction: column; background-color: var(--bg-color); }

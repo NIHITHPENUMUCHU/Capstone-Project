@@ -1,39 +1,58 @@
-<div class="split-layout">
+<div class="auth-wrapper animate-slide-up">
   
-  <div class="hero-side">
-    <div class="hero-content animate-slide-up">
-      <h1>EventMaster Pro.</h1>
-      <p>The premium standard in intelligent event management and seamless resource allocation.</p>
+  <div class="auth-container">
+    <div class="auth-banner login-banner">
+      <div class="banner-content">
+        <svg class="brand-svg" viewBox="0 0 100 100" fill="none" stroke="var(--c-orange)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 30 50 V 35 A 20 20 0 0 1 70 35 V 50" opacity="0.6"></path>
+          <rect x="20" y="50" width="60" height="40" rx="4" fill="var(--c-teal)" stroke="none" opacity="0.15"></rect>
+          <rect x="20" y="50" width="60" height="40" rx="4"></rect>
+          <circle cx="50" cy="70" r="5" fill="var(--c-orange)"></circle>
+          <line x1="50" y1="75" x2="50" y2="85"></line>
+        </svg>
+        
+        <h2>Secure Gateway</h2>
+        <p>Authenticate to access your assigned EventMaster operations terminal.</p>
+      </div>
     </div>
-  </div>
 
-  <div class="form-side">
-    <div class="login-card animate-slide-up">
-      <div class="login-header">
-        <h2>Welcome Back</h2>
-        <p>Sign in to your account</p>
+    <div class="auth-form-section">
+      <div class="form-header">
+        <h3>Welcome Back</h3>
+        <p>Enter your credentials to continue.</p>
       </div>
 
       <div *ngIf="showError" class="alert alert-danger">{{ errorMessage }}</div>
-      
-      <form [formGroup]="itemForm" (ngSubmit)="onLogin()">
+
+      <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+        
         <div class="form-group">
           <label>Username</label>
-          <input type="text" formControlName="username" placeholder="Enter Username">
-          <div *ngIf="itemForm.get('username')?.invalid && itemForm.get('username')?.touched" class="validation-error">Username is required.</div>
+          <div class="input-wrapper">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <input type="text" formControlName="username" placeholder="Enter your username">
+          </div>
+          <div *ngIf="itemForm.get('username')?.touched && itemForm.get('username')?.invalid" class="validation-error">
+            Username is required.
+          </div>
         </div>
-        
+
         <div class="form-group">
           <label>Password</label>
-          <input type="password" formControlName="password" placeholder="Enter Password">
-          <div *ngIf="itemForm.get('password')?.invalid && itemForm.get('password')?.touched" class="validation-error">Password is required.</div>
+          <div class="input-wrapper">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+            <input type="password" formControlName="password" placeholder="Enter your password">
+          </div>
+          <div *ngIf="itemForm.get('password')?.touched && itemForm.get('password')?.invalid" class="validation-error">
+            Password is required.
+          </div>
         </div>
-        
-        <button type="submit" class="btn login-btn" [disabled]="!itemForm.valid">Log In</button>
+
+        <button type="submit" class="auth-btn" [disabled]="!itemForm.valid">Authenticate</button>
       </form>
-      
-      <div class="login-footer">
-        <p>Don't have an account? <a href="javascript:void(0)" (click)="registration()">Create one</a></p>
+
+      <div class="auth-footer">
+        Don't have an account? <a routerLink="/registration">Register here</a>
       </div>
     </div>
   </div>

@@ -41,7 +41,6 @@ public class ResourceService {
         allocation.setResource(resource);
         allocation.setQuantity(quantity);
 
-        // REQUIRED FOR TEST CASE 8: Update resource availability to false
         resource.setAvailability(false);
         resourceRepository.save(resource);
 

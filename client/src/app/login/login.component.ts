@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { HttpService } from '../../services/http.service';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -10,18 +10,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  
-  itemForm!: FormGroup; 
-  formModel: any = {}; 
-  showError: boolean = false; 
-  errorMessage: any;
+  itemForm!: FormGroup;
+  showError: boolean = false;
+  errorMessage: string = '';
 
   constructor(
-    public router: Router, 
-    public httpService: HttpService, 
-    private formBuilder: FormBuilder, 
+    private formBuilder: FormBuilder,
+    private httpService: HttpService,
+    private router: Router,
     private authService: AuthService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.itemForm = this.formBuilder.group({
@@ -30,29 +28,27 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onLogin(): void {
+  onSubmit(): void {
     if (this.itemForm.valid) {
       this.httpService.Login(this.itemForm.value).subscribe(
         (res: any) => {
-          this.authService.saveToken(res.token);
-          this.authService.SetRole(res.role || 'CLIENT'); 
-          this.showError = false;
-          
-          this.router.navigate(['/dashboard']).then(() => {
-            window.location.reload();
-          });
+          if (res && res.token) {
+            this.authService.saveToken(res.token);
+            // Uses the role we added to the LoginResponse DTO!
+            this.authService.SetRole(res.role); 
+            this.router.navigateByUrl('/dashboard');
+          } else {
+            this.showError = true;
+            this.errorMessage = "Invalid response from server.";
+          }
         },
         (error: any) => {
           this.showError = true;
-          this.errorMessage = "Incorrect username or password. Please try again.";
+          this.errorMessage = "Login failed. Please check your credentials and try again.";
         }
       );
     } else {
       this.itemForm.markAllAsTouched();
     }
-  }
-
-  registration(): void {
-    this.router.navigate(['/registration']);
   }
 }
