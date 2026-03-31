@@ -8,55 +8,44 @@ import { HttpService } from '../../services/http.service';
   styleUrls: ['./add-resource.component.scss']
 })
 export class AddResourceComponent implements OnInit {
-  itemForm!: FormGroup;  
-  resourceList: any[] = []; 
-  showError: boolean = false; 
-  errorMessage: string = ''; 
-  showMessage: boolean = false; 
+  itemForm!: FormGroup;
+  resourceList: any[] = [];
+  showMessage: boolean = false;
   responseMessage: string = '';
+  showError: boolean = false;
+  errorMessage: string = '';
 
-  constructor(
-    private formBuilder: FormBuilder, 
-    public httpService: HttpService
-  ) { }
+  constructor(private formBuilder: FormBuilder, private httpService: HttpService) {}
 
   ngOnInit(): void {
     this.itemForm = this.formBuilder.group({
       name: ['', Validators.required],
       type: ['', Validators.required],
-      availability: ['', Validators.required]
+      availability: [true]
     });
-    
-    this.getResouce(); 
+    this.getResources();
   }
 
-  getResouce(): void {
-    this.httpService.GetAllResources().subscribe(
-      (data: any) => { 
-        this.resourceList = data; 
-      },
-      (error: any) => {
-        this.showError = true;
-        this.errorMessage = "Failed to load resources. Please try again.";
-      }
-    );
+  getResources(): void {
+    this.httpService.GetAllResources().subscribe((data) => {
+      this.resourceList = data;
+    });
   }
 
   onSubmit(): void {
     if (this.itemForm.valid) {
       this.httpService.addResource(this.itemForm.value).subscribe(
-        (res: any) => {
+        (res) => {
           this.showMessage = true;
-          this.responseMessage = "Resource successfully added to inventory!";
-          this.showError = false;
-          
-          this.itemForm.reset();
-          this.getResouce();
+          this.responseMessage = "Resource added to global inventory!";
+          this.itemForm.reset({ availability: true });
+          this.getResources();
+          setTimeout(() => this.showMessage = false, 3000);
         },
-        (error: any) => {
+        (error) => {
           this.showError = true;
-          this.errorMessage = "Failed to add resource. Ensure all fields are filled correctly.";
-          this.showMessage = false;
+          this.errorMessage = "Failed to add resource.";
+          setTimeout(() => this.showError = false, 3000);
         }
       );
     } else {

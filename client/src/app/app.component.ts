@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../services/auth.service'; // CRITICAL FIX: Changed ../../ to ../
+import { Component } from '@angular/core';
+import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,22 +7,35 @@ import { Router } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-  IsLoggin: boolean = false;
-  roleName: string | null = null;
+export class AppComponent {
+  
+  // Controls the visibility of the logout confirmation modal
+  showLogoutModal: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {
-    // Check local storage immediately when the app loads
-    this.IsLoggin = this.authService.getLoginStatus();
-    this.roleName = this.authService.getRole();
+  get IsLoggin(): boolean {
+    return this.authService.getLoginStatus();
   }
 
-  logout(): void {
+  get roleName(): string | null {
+    const role = this.authService.getRole();
+    return role ? role.toUpperCase() : null;
+  }
+
+  // Opens the modal instead of logging out immediately
+  triggerLogout(): void {
+    this.showLogoutModal = true;
+  }
+
+  cancelLogout(): void {
+    this.showLogoutModal = false;
+  }
+
+  // Actually performs the logout when confirmed
+  confirmLogout(): void {
     this.authService.logout();
-    this.IsLoggin = false;
-    this.roleName = null;
+    this.showLogoutModal = false;
     this.router.navigate(['/login']);
   }
 }

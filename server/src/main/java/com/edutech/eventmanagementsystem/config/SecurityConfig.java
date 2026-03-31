@@ -1,3 +1,4 @@
+
 package com.edutech.eventmanagementsystem.config;
 
 import com.edutech.eventmanagementsystem.jwt.JwtRequestFilter;
@@ -54,7 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 }
 
-// old securityconfig:
+
+// // old securityconfig:
  
 
 // package com.edutech.eventmanagementsystem.config;

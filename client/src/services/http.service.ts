@@ -11,6 +11,9 @@ import { throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class HttpService {
+  getAllAllocations() {
+    throw new Error('Method not implemented.');
+  }
   // The test specifically looks for 'service.serverName' for Login and Register
   public serverName = environment.apiUrl; 
 

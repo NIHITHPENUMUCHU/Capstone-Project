@@ -1,84 +1,77 @@
-<div class="workspace-layout animate-slide-up">
-  
-  <div class="glass-panel form-panel">
-    <div class="panel-header">
-      <div class="header-icon">✨</div>
-      <div class="header-text">
-        <h2>Draft Event</h2>
-        <p>Configure new event parameters</p>
-      </div>
+<div class="page-wrapper animate-slide-up">
+  <div class="page-header">
+    <div class="header-icon teal-bg">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
     </div>
+    <div class="header-text">
+      <h2>Event Sequence Registry</h2>
+      <p>Draft new events and monitor the global schedule.</p>
+    </div>
+  </div>
 
-    <div *ngIf="showMessage" class="alert alert-success">{{ responseMessage }}</div>
-    <div *ngIf="showError" class="alert alert-danger">{{ errorMessage }}</div>
-
-    <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label>Event Title</label>
-        <div class="input-wrapper">
-          <input type="text" formControlName="title" placeholder="e.g. Annual Tech Summit">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Date & Time</label>
-        <div class="input-wrapper">
-          <input type="datetime-local" formControlName="dateTime">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Location</label>
-        <div class="input-wrapper">
-          <input type="text" formControlName="location" placeholder="e.g. Main Auditorium">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Description</label>
-        <textarea formControlName="description" rows="3" placeholder="Provide event details..."></textarea>
-      </div>
+  <div class="content-grid">
+    <div class="enterprise-card form-card">
+      <h3>Draft New Event</h3>
       
-      <button type="submit" class="btn submit-btn" [disabled]="!itemForm.valid">Launch Event</button>
-    </form>
-  </div>
+      <div *ngIf="showMessage" class="alert alert-success">{{ responseMessage }}</div>
+      <div *ngIf="showError" class="alert alert-danger">{{ errorMessage }}</div>
 
-  <div class="glass-panel table-panel" style="animation-delay: 0.2s;">
-    <div class="panel-header">
-      <div class="header-icon">📡</div>
-      <div class="header-text">
-        <h2>Live Event Registry</h2>
-        <p>Real-time overview of all scheduled and active events.</p>
+      <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label>Event Name</label>
+          <input type="text" formControlName="name" placeholder="e.g., Annual Tech Summit">
+          <span class="validation-error" *ngIf="itemForm.get('name')?.touched && itemForm.get('name')?.invalid">Required</span>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea formControlName="description" rows="3" placeholder="Event details and objectives..."></textarea>
+          <span class="validation-error" *ngIf="itemForm.get('description')?.touched && itemForm.get('description')?.invalid">Required</span>
+        </div>
+
+        <div class="form-group">
+          <label>Event Date</label>
+          <input type="date" formControlName="eventDate">
+          <span class="validation-error" *ngIf="itemForm.get('eventDate')?.touched && itemForm.get('eventDate')?.invalid">Required</span>
+        </div>
+
+        <div class="form-group">
+          <label>Location / Sector</label>
+          <input type="text" formControlName="location" placeholder="e.g., Main Hall A">
+          <span class="validation-error" *ngIf="itemForm.get('location')?.touched && itemForm.get('location')?.invalid">Required</span>
+        </div>
+
+        <button type="submit" class="btn-primary" [disabled]="!itemForm.valid">Initialize Event</button>
+      </form>
+    </div>
+
+    <div class="enterprise-card table-card">
+      <h3>Global Event Database</h3>
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Event Name</th>
+              <th>Date</th>
+              <th>Location</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let event of eventList">
+              <td class="id-col">#{{ event.id }}</td>
+              <td class="fw-bold">{{ event.name }}</td>
+              <td>{{ event.eventDate | date:'mediumDate' }}</td>
+              <td>{{ event.location }}</td>
+              <td><span class="status-badge" [ngClass]="event.status.toLowerCase()">{{ event.status }}</span></td>
+            </tr>
+            <tr *ngIf="eventList.length === 0">
+              <td colspan="5" class="empty-state">No events found in the database.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-
-    <div class="table-container">
-      <table class="modern-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Schedule</th>
-            <th>Location</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let ev of eventList">
-            <td class="id-cell">#{{ ev.eventID || ev.id }}</td>
-            <td class="fw-bold text-white">{{ ev.title }}</td>
-            <td class="text-muted">{{ ev.dateTime | date:'MMM d, y, h:mm a' }}</td>
-            <td><span class="location-tag">{{ ev.location }}</span></td>
-            <td>
-              <span class="status-badge" [ngClass]="ev.status | lowercase">
-                <span *ngIf="ev.status === 'ONGOING'" class="live-pulse"></span>
-                {{ ev.status }}
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
-
 </div>

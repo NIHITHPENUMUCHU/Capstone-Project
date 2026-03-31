@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../services/http.service';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-event',
@@ -10,62 +8,46 @@ import { Router } from '@angular/router';
   styleUrls: ['./create-event.component.scss']
 })
 export class CreateEventComponent implements OnInit {
-  
-  // Variables strictly matching the Capstone Document
-  itemForm!: FormGroup;  
-  formModel: any = { status: null }; 
-  showError: boolean = false; 
-  errorMessage: any; 
-  eventList: any = []; 
-  assignModel: any = {};
-  showMessage: boolean = false; 
-  responseMessage: any;
+  itemForm!: FormGroup;
+  eventList: any[] = [];
+  showMessage: boolean = false;
+  responseMessage: string = '';
+  showError: boolean = false;
+  errorMessage: string = '';
 
-  constructor(
-    public router: Router, 
-    public httpService: HttpService, 
-    private formBuilder: FormBuilder, 
-    private authService: AuthService
-  ) { }
+  constructor(private formBuilder: FormBuilder, private httpService: HttpService) {}
 
-    ngOnInit(): void {
+  ngOnInit(): void {
     this.itemForm = this.formBuilder.group({
-      title: ['', Validators.required],
+      name: ['', Validators.required],
       description: ['', Validators.required],
-      dateTime: ['', Validators.required],
+      eventDate: ['', Validators.required],
       location: ['', Validators.required],
-      status: ['SCHEDULED', Validators.required]
+      status: ['SCHEDULED'] // Default status
     });
-    this.getEvent();
+    this.getEvents();
   }
 
-  getEvent(): void {
-    this.httpService.GetAllevents().subscribe(
-      (data: any) => { 
-        this.eventList = data; 
-      },
-      (error: any) => {
-        this.showError = true;
-        this.errorMessage = "Failed to fetch events from the server.";
-        console.error(this.errorMessage, error);
-      }
-    );
+  getEvents(): void {
+    this.httpService.GetAllevents().subscribe((data) => {
+      this.eventList = data;
+    });
   }
 
   onSubmit(): void {
     if (this.itemForm.valid) {
       this.httpService.createEvent(this.itemForm.value).subscribe(
-        (res: any) => {
+        (res) => {
           this.showMessage = true;
-          this.responseMessage = "Event created successfully!";
-          this.showError = false;
+          this.responseMessage = "Event successfully drafted!";
           this.itemForm.reset({ status: 'SCHEDULED' });
-          this.getEvent();
+          this.getEvents();
+          setTimeout(() => this.showMessage = false, 3000);
         },
-        (error: any) => {
+        (error) => {
           this.showError = true;
           this.errorMessage = "Failed to create event. Please try again.";
-          this.showMessage = false;
+          setTimeout(() => this.showError = false, 3000);
         }
       );
     } else {

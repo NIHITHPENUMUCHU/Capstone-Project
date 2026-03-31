@@ -24,14 +24,12 @@ export class ResourceAllocateComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // 3 strict controls required for allocation
     this.itemForm = this.formBuilder.group({
       eventId: ['', Validators.required],
       resourceId: ['', Validators.required],
-      quantity: ['', [Validators.required, Validators.min(1)]]
+      quantity: ['', [Validators.required, Validators.min(1)]] // Added quantity back!
     });
 
-    // Fetch dropdown data on load
     this.getEvent();
     this.getResources();
   }
@@ -54,6 +52,7 @@ export class ResourceAllocateComponent implements OnInit {
     if (this.itemForm.valid) {
       const formValues = this.itemForm.value;
       
+      // Using your exact method signature: eventId, resourceId, and the form payload
       this.httpService.allocateResources(formValues.eventId, formValues.resourceId, formValues).subscribe(
         (res: any) => {
           this.showMessage = true;
@@ -61,12 +60,16 @@ export class ResourceAllocateComponent implements OnInit {
           this.showError = false;
           
           this.itemForm.reset();
-          this.getResources(); // Refresh resources in case availability changed
+          this.getResources(); // Refresh resources to update their availability status
+          
+          setTimeout(() => this.showMessage = false, 3000);
         },
         (error: any) => {
           this.showError = true;
           this.errorMessage = "Failed to allocate resource. Please check availability and try again.";
           this.showMessage = false;
+          
+          setTimeout(() => this.showError = false, 3000);
         }
       );
     } else {

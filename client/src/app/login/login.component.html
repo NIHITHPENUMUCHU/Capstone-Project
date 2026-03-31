@@ -1,6 +1,6 @@
-<div class="auth-wrapper animate-slide-up">
-  
-  <div class="auth-container">
+<div class="auth-wrapper">
+  <div class="auth-container animate-slide-up">
+    
     <div class="auth-banner login-banner">
       <div class="banner-content">
         <svg class="brand-svg" viewBox="0 0 100 100" fill="none" stroke="var(--c-orange)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
@@ -10,7 +10,6 @@
           <circle cx="50" cy="70" r="5" fill="var(--c-orange)"></circle>
           <line x1="50" y1="75" x2="50" y2="85"></line>
         </svg>
-        
         <h2>Secure Gateway</h2>
         <p>Authenticate to access your assigned EventMaster operations terminal.</p>
       </div>
@@ -25,7 +24,6 @@
       <div *ngIf="showError" class="alert alert-danger">{{ errorMessage }}</div>
 
       <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
-        
         <div class="form-group">
           <label>Username</label>
           <div class="input-wrapper">
@@ -33,7 +31,8 @@
             <input type="text" formControlName="username" placeholder="Enter your username">
           </div>
           <div *ngIf="itemForm.get('username')?.touched && itemForm.get('username')?.invalid" class="validation-error">
-            Username is required.
+            <span *ngIf="itemForm.get('username')?.errors?.['required']">Username is required.</span>
+            <span *ngIf="itemForm.get('username')?.errors?.['pattern']">Must be 4-20 characters (no spaces).</span>
           </div>
         </div>
 
@@ -44,7 +43,8 @@
             <input type="password" formControlName="password" placeholder="Enter your password">
           </div>
           <div *ngIf="itemForm.get('password')?.touched && itemForm.get('password')?.invalid" class="validation-error">
-            Password is required.
+            <span *ngIf="itemForm.get('password')?.errors?.['required']">Password is required.</span>
+            <span *ngIf="itemForm.get('password')?.errors?.['pattern']">Password does not meet security requirements.</span>
           </div>
         </div>
 
@@ -56,5 +56,4 @@
       </div>
     </div>
   </div>
-
 </div>
