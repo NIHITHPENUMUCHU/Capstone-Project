@@ -23,7 +23,7 @@
           <select formControlName="eventId">
             <option value="" disabled selected>-- Select an Event --</option>
             <option *ngFor="let ev of eventList" [value]="ev.id">
-              #{{ev.id}} - {{ ev.name }}
+              #{{ev.id}} - {{ ev.title }}
             </option>
           </select>
           <span class="validation-error" *ngIf="itemForm.get('eventId')?.touched && itemForm.get('eventId')?.invalid">Required</span>

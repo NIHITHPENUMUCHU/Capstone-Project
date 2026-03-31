@@ -18,10 +18,11 @@ export class CreateEventComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private httpService: HttpService) {}
 
   ngOnInit(): void {
+    // 1. UPDATED to match your Java Backend Entity exactly
     this.itemForm = this.formBuilder.group({
-      name: ['', Validators.required],
+      title: ['', Validators.required],       // Changed from 'name'
       description: ['', Validators.required],
-      eventDate: ['', Validators.required],
+      datetime: ['', Validators.required],    // Changed from 'eventDate'
       location: ['', Validators.required],
       status: ['SCHEDULED'] // Default status
     });
@@ -29,6 +30,7 @@ export class CreateEventComponent implements OnInit {
   }
 
   getEvents(): void {
+    // 2. UPDATED to match your exact http.service.ts method name
     this.httpService.GetAllevents().subscribe((data) => {
       this.eventList = data;
     });
