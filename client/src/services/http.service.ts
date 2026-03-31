@@ -11,9 +11,12 @@ import { throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class HttpService {
-  getAllAllocations() {
-    throw new Error('Method not implemented.');
+  
+  // THE FIX: Properly calling the backend instead of throwing an error!
+  getAllAllocations(): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/api/planner/allocations`, { headers: this.getHeaders() });
   }
+
   // The test specifically looks for 'service.serverName' for Login and Register
   public serverName = environment.apiUrl; 
 

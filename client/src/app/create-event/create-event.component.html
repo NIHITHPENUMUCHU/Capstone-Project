@@ -31,8 +31,8 @@
 
         <div class="form-group">
           <label>Event Date & Time</label>
-          <input type="date" formControlName="datetime">
-          <span class="validation-error" *ngIf="itemForm.get('datetime')?.touched && itemForm.get('datetime')?.invalid">Required</span>
+          <input type="date" formControlName="dateTime">
+          <span class="validation-error" *ngIf="itemForm.get('dateTime')?.touched && itemForm.get('dateTime')?.invalid">Required</span>
         </div>
 
         <div class="form-group">
@@ -60,9 +60,18 @@
           </thead>
           <tbody>
             <tr *ngFor="let event of eventList">
-              <td class="id-col">#{{ event.id }}</td>
-              <td class="fw-bold">{{ event.title }}</td>
-              <td>{{ event.datetime | date:'mediumDate' }}</td>
+              <td class="id-col">#{{ event.eventID || event.id || '...' }}</td>
+              <td class="fw-bold">{{ event.title || event.name }}</td>
+              
+              <td>
+                <span *ngIf="event.dateTime || event.datetime || event.eventDate">
+                  {{ (event.dateTime || event.datetime || event.eventDate) | date:'mediumDate' }}
+                </span>
+                <span *ngIf="!(event.dateTime || event.datetime || event.eventDate)" style="color: #94a3b8; font-style: italic;">
+                  Not Set
+                </span>
+              </td>
+              
               <td>{{ event.location }}</td>
               <td><span class="status-badge" [ngClass]="event.status?.toLowerCase()">{{ event.status }}</span></td>
             </tr>

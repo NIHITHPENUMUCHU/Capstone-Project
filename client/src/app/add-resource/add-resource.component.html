@@ -1,7 +1,12 @@
 <div class="page-wrapper animate-slide-up">
   <div class="page-header">
     <div class="header-icon orange-bg">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+        <polyline points="2 17 12 22 22 17"></polyline>
+        <polyline points="2 12 12 17 22 12"></polyline>
+      </svg>
     </div>
     <div class="header-text">
       <h2>Inventory Management</h2>
@@ -12,7 +17,7 @@
   <div class="content-grid">
     <div class="enterprise-card form-card">
       <h3>Register Asset</h3>
-      
+
       <div *ngIf="showMessage" class="alert alert-success">{{ responseMessage }}</div>
       <div *ngIf="showError" class="alert alert-danger">{{ errorMessage }}</div>
 
@@ -20,7 +25,8 @@
         <div class="form-group">
           <label>Resource Name</label>
           <input type="text" formControlName="name" placeholder="e.g., 4K Projector">
-          <span class="validation-error" *ngIf="itemForm.get('name')?.touched && itemForm.get('name')?.invalid">Required</span>
+          <span class="validation-error"
+            *ngIf="itemForm.get('name')?.touched && itemForm.get('name')?.invalid">Required</span>
         </div>
 
         <div class="form-group">
@@ -31,7 +37,16 @@
             <option value="PERSONNEL">Human Personnel</option>
             <option value="VENUE">Venue / Room</option>
           </select>
-          <span class="validation-error" *ngIf="itemForm.get('type')?.touched && itemForm.get('type')?.invalid">Required</span>
+          <span class="validation-error"
+            *ngIf="itemForm.get('type')?.touched && itemForm.get('type')?.invalid">Required</span>
+        </div>
+
+        <div class="form-group" *ngIf="itemForm.get('quantity')">
+          <label>Total Quantity</label>
+          <input type="number" formControlName="quantity" placeholder="e.g., 50" min="1">
+          <span class="validation-error" *ngIf="itemForm.get('quantity')?.touched && itemForm.get('quantity')?.invalid">
+            Please enter a valid quantity.
+          </span>
         </div>
 
         <button type="submit" class="btn-primary orange-btn" [disabled]="!itemForm.valid">Add to Inventory</button>
@@ -47,14 +62,20 @@
               <th>ID</th>
               <th>Asset Name</th>
               <th>Category</th>
+              <th>Quantity</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let res of resourceList">
-              <td class="id-col">#{{ res.id }}</td>
+              <td class="id-col">#{{ res.resourceID || res.id || '...' }}</td>
               <td class="fw-bold">{{ res.name }}</td>
               <td>{{ res.type }}</td>
+
+              <td class="fw-bold" style="color: var(--c-teal);">
+                {{ res.quantity != null ? res.quantity : 0 }} Units
+              </td>
+
               <td>
                 <span class="status-badge" [ngClass]="res.availability ? 'available' : 'allocated'">
                   {{ res.availability ? 'AVAILABLE' : 'ALLOCATED' }}
@@ -62,7 +83,7 @@
               </td>
             </tr>
             <tr *ngIf="resourceList.length === 0">
-              <td colspan="4" class="empty-state">No resources in inventory.</td>
+              <td colspan="5" class="empty-state">No resources in inventory.</td>
             </tr>
           </tbody>
         </table>

@@ -49,4 +49,9 @@ public class EventPlannerController {
             @RequestBody Allocation allocation) {
         return ResponseEntity.ok(resourceService.allocateResource(eventId, resourceId, allocation.getQuantity()));
     }
+
+    @GetMapping("/allocations")
+    public ResponseEntity<List<Allocation>> getAllocations() {
+        return ResponseEntity.ok(resourceService.getAllAllocations()); // Assuming your ResourceService has this method
+    }
 }

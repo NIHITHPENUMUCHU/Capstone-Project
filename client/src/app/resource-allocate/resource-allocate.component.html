@@ -22,8 +22,8 @@
           <label>Target Event</label>
           <select formControlName="eventId">
             <option value="" disabled selected>-- Select an Event --</option>
-            <option *ngFor="let ev of eventList" [value]="ev.id">
-              #{{ev.id}} - {{ ev.title }}
+            <option *ngFor="let ev of eventList" [value]="ev.eventID || ev.id">
+              #{{ev.eventID || ev.id || '...'}} - {{ ev.title || ev.name }}
             </option>
           </select>
           <span class="validation-error" *ngIf="itemForm.get('eventId')?.touched && itemForm.get('eventId')?.invalid">Required</span>
@@ -33,8 +33,8 @@
           <label>Available Resource</label>
           <select formControlName="resourceId">
             <option value="" disabled selected>-- Select a Resource --</option>
-            <option *ngFor="let res of resourceList" [value]="res.id">
-              #{{res.id}} - {{ res.name }}
+            <option *ngFor="let res of resourceList" [value]="res.resourceID || res.id">
+              #{{res.resourceID || res.id || '...'}} - {{ res.name }}
             </option>
           </select>
           <span class="validation-error" *ngIf="itemForm.get('resourceId')?.touched && itemForm.get('resourceId')?.invalid">Required</span>
@@ -53,24 +53,33 @@
     </div>
 
     <div class="enterprise-card table-card">
-      <h3>Live Resource Tracker</h3>
+      <h3>Active Allocations Registry</h3>
       <div class="table-responsive">
         <table class="data-table">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Resource Name</th>
-              <th>Category</th>
+              <th>Alloc. ID</th>
+              <th>Resource Allocated</th>
+              <th>Target Event</th>
+              <th>Quantity</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let res of resourceList">
-              <td class="id-col">#{{ res.id }}</td>
-              <td class="fw-bold">{{ res.name }}</td>
-              <td>{{ res.type }}</td>
+            <tr *ngFor="let alloc of allocationList">
+              <td class="id-col">#{{ alloc.allocationID || alloc.id || '...' }}</td>
+              
+              <td class="fw-bold" style="color: var(--c-teal);">
+                {{ alloc.resource?.name || 'Unknown Asset' }}
+              </td>
+              <td>{{ alloc.event?.title || alloc.event?.name || 'Unknown Event' }}</td>
+              
+              <td class="fw-bold" style="color: var(--c-orange);">
+                {{ alloc.quantity != null ? alloc.quantity : 1 }} Units
+              </td>
             </tr>
-            <tr *ngIf="resourceList.length === 0">
-              <td colspan="3" class="empty-state">No resources currently available.</td>
+            
+            <tr *ngIf="allocationList.length === 0">
+              <td colspan="4" class="empty-state">No active allocations found in the registry.</td>
             </tr>
           </tbody>
         </table>

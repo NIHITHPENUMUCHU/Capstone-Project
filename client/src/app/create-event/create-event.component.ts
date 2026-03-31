@@ -18,19 +18,17 @@ export class CreateEventComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private httpService: HttpService) {}
 
   ngOnInit(): void {
-    // 1. UPDATED to match your Java Backend Entity exactly
     this.itemForm = this.formBuilder.group({
-      title: ['', Validators.required],       // Changed from 'name'
+      title: ['', Validators.required],
       description: ['', Validators.required],
-      datetime: ['', Validators.required],    // Changed from 'eventDate'
+      dateTime: ['', Validators.required], // THE FIX: Capital T to match Java!
       location: ['', Validators.required],
-      status: ['SCHEDULED'] // Default status
+      status: ['SCHEDULED'] 
     });
     this.getEvents();
   }
 
   getEvents(): void {
-    // 2. UPDATED to match your exact http.service.ts method name
     this.httpService.GetAllevents().subscribe((data) => {
       this.eventList = data;
     });

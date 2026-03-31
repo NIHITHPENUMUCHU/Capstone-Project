@@ -21,13 +21,16 @@ export class AddResourceComponent implements OnInit {
     this.itemForm = this.formBuilder.group({
       name: ['', Validators.required],
       type: ['', Validators.required],
-      availability: [true]
+      quantity: ['', [Validators.required, Validators.min(1)]], 
+      
+      availability: [true, Validators.required] 
     });
+    
     this.getResources();
   }
 
   getResources(): void {
-    this.httpService.GetAllResources().subscribe((data) => {
+    this.httpService.GetAllResources().subscribe((data: any) => {
       this.resourceList = data;
     });
   }
@@ -35,14 +38,14 @@ export class AddResourceComponent implements OnInit {
   onSubmit(): void {
     if (this.itemForm.valid) {
       this.httpService.addResource(this.itemForm.value).subscribe(
-        (res) => {
+        (res: any) => {
           this.showMessage = true;
           this.responseMessage = "Resource added to global inventory!";
           this.itemForm.reset({ availability: true });
           this.getResources();
           setTimeout(() => this.showMessage = false, 3000);
         },
-        (error) => {
+        (error: any) => {
           this.showError = true;
           this.errorMessage = "Failed to add resource.";
           setTimeout(() => this.showError = false, 3000);

@@ -1,23 +1,28 @@
 package com.edutech.eventmanagementsystem.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 
 @Entity
 public class Allocation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("allocationID")
     private Long allocationID;
 
     @ManyToOne
     @JoinColumn(name = "event_id")
-    @JsonIgnore 
+    @JsonIgnoreProperties("allocations") // THE FIX: Sends event details, but blocks the infinite loop!
     private Event event;
 
     @ManyToOne
     @JoinColumn(name = "resource_id")
+    @JsonIgnoreProperties("allocations") 
     private Resource resource;
 
+    @JsonProperty("quantity")
     private int quantity;
 
     public Allocation() {}

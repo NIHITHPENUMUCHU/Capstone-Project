@@ -17,6 +17,9 @@ export class ResourceAllocateComponent implements OnInit {
   
   resourceList: any[] = []; 
   eventList: any[] = [];
+  
+  // THE FIX: Added the missing allocationList array
+  allocationList: any[] = []; 
 
   constructor(
     private formBuilder: FormBuilder, 
@@ -27,11 +30,14 @@ export class ResourceAllocateComponent implements OnInit {
     this.itemForm = this.formBuilder.group({
       eventId: ['', Validators.required],
       resourceId: ['', Validators.required],
-      quantity: ['', [Validators.required, Validators.min(1)]] // Added quantity back!
+      quantity: ['', [Validators.required, Validators.min(1)]] 
     });
 
     this.getEvent();
     this.getResources();
+    
+    // THE FIX: Fetch the allocations when the page loads
+    this.getAllocations(); 
   }
 
   getEvent(): void {
@@ -48,11 +54,18 @@ export class ResourceAllocateComponent implements OnInit {
     );
   }
 
+  // THE FIX: Method to grab the allocations from your Spring Boot backend
+  getAllocations(): void {
+    this.httpService.getAllAllocations().subscribe(
+      (data: any) => { this.allocationList = data; },
+      (error: any) => { console.error("Failed to fetch allocations", error); }
+    );
+  }
+
   onSubmit(): void {
     if (this.itemForm.valid) {
       const formValues = this.itemForm.value;
       
-      // Using your exact method signature: eventId, resourceId, and the form payload
       this.httpService.allocateResources(formValues.eventId, formValues.resourceId, formValues).subscribe(
         (res: any) => {
           this.showMessage = true;
@@ -60,7 +73,10 @@ export class ResourceAllocateComponent implements OnInit {
           this.showError = false;
           
           this.itemForm.reset();
-          this.getResources(); // Refresh resources to update their availability status
+          this.getResources(); 
+          
+          // THE FIX: Refresh the tracker table after a successful allocation
+          this.getAllocations(); 
           
           setTimeout(() => this.showMessage = false, 3000);
         },

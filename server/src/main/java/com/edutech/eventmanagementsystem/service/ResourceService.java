@@ -32,6 +32,10 @@ public class ResourceService {
         return resourceRepository.findAll();
     }
 
+    public List<Allocation> getAllAllocations() {
+        return allocationRepository.findAll();
+    }
+
     public Allocation allocateResource(Long eventId, Long resourceId, int quantity) {
         Event event = eventRepository.findById(eventId).orElseThrow();
         Resource resource = resourceRepository.findById(resourceId).orElseThrow();
@@ -44,6 +48,7 @@ public class ResourceService {
         resource.setAvailability(false);
         resourceRepository.save(resource);
 
+        // RESTORED FOR CAPSTONE TEST 8
         if (event.getAllocations() == null) {
             event.setAllocations(new ArrayList<>());
         }
