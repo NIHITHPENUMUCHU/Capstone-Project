@@ -11,16 +11,10 @@ import { AuthService } from '../../services/auth.service';
 })
 export class BookingDetailsComponent implements OnInit {
   
-  formModel: any = { status: null, eventID: null }; 
+  formModel: any = { eventID: null }; 
   showError: boolean = false; 
   errorMessage: string = ''; 
   eventObj: any = []; 
-  assignModel: any = {}; 
-  showMessage: boolean = false; 
-  responseMessage: string = ''; 
-  isUpdate: boolean = false;
-
-  // Satisfies the strict HTML *ngFor requirement
   scores$: any = []; 
 
   constructor(

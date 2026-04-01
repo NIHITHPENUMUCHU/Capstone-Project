@@ -17,9 +17,9 @@ export class ResourceAllocateComponent implements OnInit {
   
   resourceList: any[] = []; 
   eventList: any[] = [];
-  
-  // THE FIX: Added the missing allocationList array
   allocationList: any[] = []; 
+  
+  selectedResourceMax: number = 0;
 
   constructor(
     private formBuilder: FormBuilder, 
@@ -33,10 +33,26 @@ export class ResourceAllocateComponent implements OnInit {
       quantity: ['', [Validators.required, Validators.min(1)]] 
     });
 
+    // THE FIX: Listen to the resource dropdown to cap the max quantity dynamically!
+    this.itemForm.get('resourceId')?.valueChanges.subscribe(resId => {
+      if (!resId) return; // Ignore if the form is being reset
+      
+      const selectedRes = this.resourceList.find(r => (r.resourceID || r.id) == resId);
+      if (selectedRes) {
+        this.selectedResourceMax = selectedRes.quantity || 0;
+        
+        // Apply the strict dynamic maximum limit to the input box
+        this.itemForm.get('quantity')?.setValidators([
+          Validators.required, 
+          Validators.min(1), 
+          Validators.max(this.selectedResourceMax) 
+        ]);
+        this.itemForm.get('quantity')?.updateValueAndValidity();
+      }
+    });
+
     this.getEvent();
     this.getResources();
-    
-    // THE FIX: Fetch the allocations when the page loads
     this.getAllocations(); 
   }
 
@@ -54,10 +70,23 @@ export class ResourceAllocateComponent implements OnInit {
     );
   }
 
-  // THE FIX: Method to grab the allocations from your Spring Boot backend
   getAllocations(): void {
     this.httpService.getAllAllocations().subscribe(
-      (data: any) => { this.allocationList = data; },
+      (data: any[]) => { 
+        const seen = new Set();
+        this.allocationList = data.filter(alloc => {
+          const eventId = alloc.event?.eventID || alloc.event?.id;
+          const resourceId = alloc.resource?.resourceID || alloc.resource?.id;
+          const uniqueKey = `${eventId}-${resourceId}`;
+          
+          if (seen.has(uniqueKey)) {
+            return false; 
+          } else {
+            seen.add(uniqueKey);
+            return true; 
+          }
+        });
+      },
       (error: any) => { console.error("Failed to fetch allocations", error); }
     );
   }
@@ -74,8 +103,6 @@ export class ResourceAllocateComponent implements OnInit {
           
           this.itemForm.reset();
           this.getResources(); 
-          
-          // THE FIX: Refresh the tracker table after a successful allocation
           this.getAllocations(); 
           
           setTimeout(() => this.showMessage = false, 3000);

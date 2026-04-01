@@ -13,9 +13,14 @@ export class DashbaordComponent implements OnInit {
   currentDate: Date = new Date();
   
   // Live Database Metrics
-  activeEventsCount: number = 0;
+  totalEvents: number = 0;
+  scheduledEvents: number = 0;
+  ongoingEvents: number = 0;
+  completedEvents: number = 0;
+
   availableResources: number = 0;
   totalResources: number = 0;
+  totalAllocations: number = 0;
 
   // Client FAQ Tracking
   showFAQ: boolean = false;
@@ -48,11 +53,20 @@ export class DashbaordComponent implements OnInit {
   }
 
   fetchLiveMetrics(): void {
+    // 1. Fetch Events & Calculate Statuses
     this.httpService.GetAllevents().subscribe(
-      (data: any[]) => { this.activeEventsCount = data ? data.length : 0; },
+      (data: any[]) => { 
+        if (data) {
+          this.totalEvents = data.length;
+          this.scheduledEvents = data.filter(e => e.status?.toUpperCase() === 'SCHEDULED').length;
+          this.ongoingEvents = data.filter(e => e.status?.toUpperCase() === 'ONGOING').length;
+          this.completedEvents = data.filter(e => e.status?.toUpperCase() === 'COMPLETED').length;
+        }
+      },
       (error) => console.error("Could not load events", error)
     );
 
+    // 2. Fetch Resources
     this.httpService.GetAllResources().subscribe(
       (data: any[]) => { 
         if (data) {
@@ -61,6 +75,23 @@ export class DashbaordComponent implements OnInit {
         }
       },
       (error) => console.error("Could not load resources", error)
+    );
+
+    // 3. Fetch Allocations (with deduplication)
+    this.httpService.getAllAllocations().subscribe(
+      (data: any[]) => {
+        if (data) {
+          const seen = new Set();
+          const uniqueAllocations = data.filter(alloc => {
+            const uniqueKey = `${alloc.event?.eventID}-${alloc.resource?.resourceID}`;
+            if (seen.has(uniqueKey)) return false;
+            seen.add(uniqueKey);
+            return true;
+          });
+          this.totalAllocations = uniqueAllocations.length;
+        }
+      },
+      (error) => console.error("Could not load allocations", error)
     );
   }
 

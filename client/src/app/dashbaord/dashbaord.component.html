@@ -14,33 +14,70 @@
 
   <ng-container *ngIf="roleName === 'PLANNER'">
     
+    <h3 class="section-title">Operations Metrics</h3>
     <div class="metrics-container">
-      <div class="metric-card teal-accent">
+      
+      <div class="metric-card navy-accent">
         <div class="custom-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="16" y1="2" x2="16" y2="6"></line>
-            <line x1="8" y1="2" x2="8" y2="6"></line>
-            <line x1="3" y1="10" x2="21" y2="10"></line>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
         </div>
         <div class="metric-text">
-          <h2>{{ activeEventsCount }}</h2>
-          <span>Active Events</span>
+          <h2>{{ totalEvents }}</h2>
+          <span>Total Drafted Events</span>
+        </div>
+      </div>
+
+      <div class="metric-card teal-accent">
+        <div class="custom-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </div>
+        <div class="metric-text">
+          <h2>{{ scheduledEvents }}</h2>
+          <span>Scheduled / Awaiting</span>
         </div>
       </div>
 
       <div class="metric-card orange-accent">
         <div class="custom-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-            <polyline points="2 17 12 22 22 17"></polyline>
-            <polyline points="2 12 12 17 22 12"></polyline>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        </div>
+        <div class="metric-text">
+          <h2>{{ ongoingEvents }}</h2>
+          <span>Live / Ongoing</span>
+        </div>
+      </div>
+
+      <div class="metric-card navy-accent">
+        <div class="custom-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <div class="metric-text">
+          <h2>{{ completedEvents }}</h2>
+          <span>Successfully Completed</span>
+        </div>
+      </div>
+
+    </div>
+
+    <h3 class="section-title">Inventory & Asset Tracking</h3>
+    <div class="metrics-container">
+      <div class="metric-card teal-accent">
+        <div class="custom-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
         </div>
         <div class="metric-text">
           <h2>{{ availableResources }}<small>/{{ totalResources }}</small></h2>
           <span>Available Resources</span>
+        </div>
+      </div>
+
+      <div class="metric-card orange-accent">
+        <div class="custom-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+        </div>
+        <div class="metric-text">
+          <h2>{{ totalAllocations }}</h2>
+          <span>Active Allocations</span>
         </div>
       </div>
     </div>

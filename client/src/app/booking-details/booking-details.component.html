@@ -1,46 +1,77 @@
 <div class="page-wrapper animate-slide-up">
-  
-  <div class="content-card search-card">
-    <div class="section-header">
-      <h2>My Bookings</h2>
-      <p>Enter your Booking/Event ID to view the latest details and status.</p>
+  <div class="page-header">
+    <div class="header-icon orange-bg">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5"></path>
+      </svg>
     </div>
-
-    <div *ngIf="showError" class="alert alert-danger">{{ errorMessage }}</div>
-
-    <div class="search-bar">
-      <input type="number" (input)="formModel.eventID = $any($event.target).value" placeholder="Enter Event ID (e.g., 1)">
-      <button class="btn search-btn" (click)="searchEvent()">Search Booking</button>
+    <div class="header-text">
+      <h2>My Tickets</h2>
+      <p>Retrieve your secure digital event passes and booking details.</p>
     </div>
   </div>
 
-  <div *ngFor="let item of scores$" class="content-card booking-card animate-slide-up" style="animation-delay: 0.1s;">
-    
-    <div class="booking-header">
-      <h3>{{ item.title }}</h3>
-      <span class="status-badge" [ngClass]="item.status | lowercase">
-        <span *ngIf="item.status === 'ONGOING'" class="live-pulse"></span>
-        {{ item.status }}
-      </span>
-    </div>
+  <div class="content-grid">
+    <div class="enterprise-card search-card">
+      <div *ngIf="showError" class="alert alert-danger">{{ errorMessage }}</div>
 
-    <div class="booking-info">
-      <div class="info-row">
-        <strong>Description:</strong> 
-        <span>{{ item.description }}</span>
-      </div>
-      
-      <div class="info-row">
-        <strong>Location:</strong> 
-        <span>{{ item.location }}</span>
-      </div>
-      
-      <div class="info-row">
-        <strong>Date & Time:</strong> 
-        <span>{{ item.dateTime | date:'medium' }}</span>
+      <div class="form-group">
+        <label>Enter Booking / Event ID</label>
+        <div class="search-bar">
+          <input type="number" (input)="formModel.eventID = $any($event.target).value" placeholder="e.g., 1">
+          <button class="btn-primary" (click)="searchEvent()">Retrieve Ticket</button>
+        </div>
       </div>
     </div>
 
+    <div *ngFor="let item of scores$" class="digital-ticket animate-slide-up">
+      
+      <div class="ticket-stub">
+        <div class="stub-header">ENTRY PASS</div>
+        
+        <div class="qr-container">
+          <img [src]="'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=AUTH-TICKET-' + (item.eventID || item.id) + '-' + item.title" 
+               alt="Ticket QR Code">
+        </div>
+        
+        <div class="stub-footer">
+          <span>TICKET ID</span>
+          <strong>#{{ item.eventID || item.id }}</strong>
+        </div>
+      </div>
+
+      <div class="ticket-body">
+        <div class="ticket-top">
+          <div class="event-title">
+            <h3>{{ item.title }}</h3>
+            <span class="status-badge" [ngClass]="item.status?.toLowerCase()">{{ item.status }}</span>
+          </div>
+        </div>
+
+        <div class="ticket-details">
+          <div class="detail-block">
+            <label>Event Description</label>
+            <p>{{ item.description }}</p>
+          </div>
+          
+          <div class="detail-row">
+            <div class="detail-block">
+              <label>Date & Time</label>
+              <p class="highlight-text">{{ item.dateTime | date:'medium' }}</p>
+            </div>
+            
+            <div class="detail-block">
+              <label>Location / Venue</label>
+              <p class="highlight-text">{{ item.location }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="ticket-barcode">
+          <div class="barcode-lines"></div>
+        </div>
+      </div>
+
+    </div>
   </div>
-
 </div>
