@@ -168,6 +168,7 @@
   &:hover {
     background: var(--c-navy); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(15, 23, 42, 0.2);
     .card-indicator { transform: scaleX(1); }
+
     .arrow-btn { transform: translateX(10px); color: var(--c-orange); }
   }
 
