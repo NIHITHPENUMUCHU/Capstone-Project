@@ -12,40 +12,45 @@ export class DashbaordComponent implements OnInit {
   roleName: string | null = null;
   currentDate: Date = new Date();
   
-  // Live Database Metrics
-  totalEvents: number = 0;
-  scheduledEvents: number = 0;
-  ongoingEvents: number = 0;
-  completedEvents: number = 0;
+  // NEW: User Identity Variables
+  username: string = 'User';
+  lastLogin: Date = new Date(); 
+  
+  // System Metrics
+  totalEvents: number = 0; scheduledEvents: number = 0; ongoingEvents: number = 0; completedEvents: number = 0;
+  availableResources: number = 0; totalResources: number = 0; totalAllocations: number = 0;
 
-  availableResources: number = 0;
-  totalResources: number = 0;
-  totalAllocations: number = 0;
-
-  // Client FAQ Tracking
-  showFAQ: boolean = false;
-  activeFaqIndex: number | null = null;
-
+  // Client FAQ
+  showFAQ: boolean = false; activeFaqIndex: number | null = null;
   faqs = [
-    { question: 'How do I use this dashboard?', answer: 'Click "Retrieve Booking" to search for your event using the Booking ID provided by your planner.' },
-    { question: 'Can I purchase tickets directly here?', answer: 'Currently, EventMaster Pro operates as a B2B management system. All ticket allocations are finalized directly with your Event Planner.' },
-    { question: 'What does "Ongoing" status mean?', answer: 'If your digital ticket says "Ongoing", it means our Staff team has actively set up the venue and operations are currently running live!' }
+    { question: 'How do I use this dashboard?', answer: 'Click "Retrieve Booking" to search for your event.' },
+    { question: 'Can I purchase tickets directly here?', answer: 'EventMaster Pro operates as a B2B management system.' },
+    { question: 'What does "Ongoing" status mean?', answer: 'Staff has actively set up the venue and operations are live!' }
   ];
 
-  constructor(
-    private authService: AuthService, 
-    private router: Router,
-    private httpService: HttpService
-  ) {}
+  constructor(private authService: AuthService, private router: Router, private httpService: HttpService) {}
 
   ngOnInit(): void {
-    if (!this.authService.getLoginStatus()) {
-      this.router.navigate(['/login']);
-      return; 
-    }
-
+    if (!this.authService.getLoginStatus()) { this.router.navigate(['/login']); return; }
+    
     const rawRole = this.authService.getRole();
     this.roleName = rawRole ? rawRole.toUpperCase() : null;
+
+    // THE FIX: Fetch the username from localStorage (fallback to 'User' if not found)
+    const storedName = localStorage.getItem('username');
+    if (storedName) {
+      this.username = storedName;
+    }
+
+    // THE FIX: Fetch Last Login (or set it to now if they just logged in)
+    const storedLastLogin = localStorage.getItem('lastLogin');
+    if (storedLastLogin) {
+      this.lastLogin = new Date(storedLastLogin);
+    } else {
+      // If your backend doesn't send a lastLogin date yet, we log the current time as their session start!
+      this.lastLogin = new Date();
+      localStorage.setItem('lastLogin', this.lastLogin.toISOString());
+    }
 
     if (this.roleName === 'PLANNER') {
       this.fetchLiveMetrics();
@@ -53,51 +58,34 @@ export class DashbaordComponent implements OnInit {
   }
 
   fetchLiveMetrics(): void {
-    // 1. Fetch Events & Calculate Statuses
-    this.httpService.GetAllevents().subscribe(
-      (data: any[]) => { 
+    // ... Keep your exact existing fetchLiveMetrics() code here! ...
+    this.httpService.GetAllevents().subscribe((data: any[]) => { 
         if (data) {
           this.totalEvents = data.length;
           this.scheduledEvents = data.filter(e => e.status?.toUpperCase() === 'SCHEDULED').length;
           this.ongoingEvents = data.filter(e => e.status?.toUpperCase() === 'ONGOING').length;
           this.completedEvents = data.filter(e => e.status?.toUpperCase() === 'COMPLETED').length;
         }
-      },
-      (error) => console.error("Could not load events", error)
-    );
+    });
 
-    // 2. Fetch Resources
-    this.httpService.GetAllResources().subscribe(
-      (data: any[]) => { 
+    this.httpService.GetAllResources().subscribe((data: any[]) => { 
         if (data) {
           this.totalResources = data.length;
           this.availableResources = data.filter(res => res.availability === true).length;
         }
-      },
-      (error) => console.error("Could not load resources", error)
-    );
+    });
 
-    // 3. Fetch Allocations (with deduplication)
-    this.httpService.getAllAllocations().subscribe(
-      (data: any[]) => {
+    this.httpService.getAllAllocations().subscribe((data: any[]) => {
         if (data) {
           const seen = new Set();
-          const uniqueAllocations = data.filter(alloc => {
+          this.totalAllocations = data.filter(alloc => {
             const uniqueKey = `${alloc.event?.eventID}-${alloc.resource?.resourceID}`;
-            if (seen.has(uniqueKey)) return false;
-            seen.add(uniqueKey);
-            return true;
-          });
-          this.totalAllocations = uniqueAllocations.length;
+            if (seen.has(uniqueKey)) return false; seen.add(uniqueKey); return true;
+          }).length;
         }
-      },
-      (error) => console.error("Could not load allocations", error)
-    );
+    });
   }
 
   toggleFAQ(): void { this.showFAQ = !this.showFAQ; }
-  
-  toggleFaqItem(index: number): void {
-    this.activeFaqIndex = this.activeFaqIndex === index ? null : index;
-  }
+  toggleFaqItem(index: number): void { this.activeFaqIndex = this.activeFaqIndex === index ? null : index; }
 }

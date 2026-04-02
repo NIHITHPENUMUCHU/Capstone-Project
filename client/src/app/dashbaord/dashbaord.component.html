@@ -3,9 +3,36 @@
   <header class="hero-banner">
     <div class="hero-content">
       <div class="role-badge">{{ roleName }}</div>
-      <h1>Welcome to your Workspace</h1>
-      <p>System Overview & Operations for {{ currentDate | date:'fullDate' }}</p>
+      
+      <h1>Welcome to your Workspace, <span class="highlight-name">{{ username }}</span></h1>
+      
+      <div class="system-status-bar">
+        
+        <div class="status-item">
+          <div class="status-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          </div>
+          <div class="status-text">
+            <small>Current System Date</small>
+            <strong>{{ currentDate | date:'fullDate' }}</strong>
+          </div>
+        </div>
+
+        <div class="status-divider"></div>
+
+        <div class="status-item">
+          <div class="status-icon orange-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </div>
+          <div class="status-text">
+            <small>Last Authentication</small>
+            <strong>{{ lastLogin | date:'MMM d, y, h:mm a' }}</strong>
+          </div>
+        </div>
+
+      </div>
     </div>
+    
     <div class="hero-shapes">
       <div class="shape teal-circle"></div>
       <div class="shape orange-square"></div>
