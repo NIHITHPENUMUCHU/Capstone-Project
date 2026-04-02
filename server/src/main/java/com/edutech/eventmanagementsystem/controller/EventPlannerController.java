@@ -54,4 +54,10 @@ public class EventPlannerController {
     public ResponseEntity<List<Allocation>> getAllocations() {
         return ResponseEntity.ok(resourceService.getAllAllocations()); // Assuming your ResourceService has this method
     }
+    
+    @Autowired private com.edutech.eventmanagementsystem.repository.NotificationRepository notificationRepository;
+    @GetMapping("/notifications")
+    public org.springframework.http.ResponseEntity<java.util.List<com.edutech.eventmanagementsystem.entity.Notification>> getPlannerNotifications() {
+        return org.springframework.http.ResponseEntity.ok(notificationRepository.findByTargetRoleOrderByIdDesc("PLANNER"));
+    }
 }

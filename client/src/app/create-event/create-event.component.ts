@@ -15,13 +15,19 @@ export class CreateEventComponent implements OnInit {
   showError: boolean = false;
   errorMessage: string = '';
 
+  // --- Pagination Variables ---
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+  totalPages: number = 0;
+  paginatedEventList: any[] = [];
+
   constructor(private formBuilder: FormBuilder, private httpService: HttpService) {}
 
   ngOnInit(): void {
     this.itemForm = this.formBuilder.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
-      dateTime: ['', Validators.required], // THE FIX: Capital T to match Java!
+      dateTime: ['', Validators.required], 
       location: ['', Validators.required],
       status: ['SCHEDULED'] 
     });
@@ -31,7 +37,32 @@ export class CreateEventComponent implements OnInit {
   getEvents(): void {
     this.httpService.GetAllevents().subscribe((data) => {
       this.eventList = data;
+      this.calculatePagination();
     });
+  }
+
+  // --- Pagination Logic ---
+  calculatePagination(): void {
+    this.totalPages = Math.ceil(this.eventList.length / this.itemsPerPage);
+    if (this.currentPage > this.totalPages && this.totalPages > 0) this.currentPage = this.totalPages;
+    this.updatePaginatedList();
+  }
+
+  updatePaginatedList(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedEventList = this.eventList.slice(startIndex, endIndex);
+  }
+
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updatePaginatedList();
+    }
+  }
+
+  getPagesArray(): number[] {
+    return Array(this.totalPages).fill(0).map((x, i) => i + 1);
   }
 
   onSubmit(): void {

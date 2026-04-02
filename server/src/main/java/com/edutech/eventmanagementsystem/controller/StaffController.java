@@ -14,13 +14,34 @@ public class StaffController {
     @Autowired
     private EventService eventService;
 
+    // Injected for the new Staff Orbital Beacon
+    @Autowired 
+    private com.edutech.eventmanagementsystem.repository.NotificationRepository notificationRepository;
+
     @GetMapping("/event-details/{eventId}")
     public ResponseEntity<Event> getEventDetails(@PathVariable("eventId") Long eventId) {
-        return ResponseEntity.ok(eventService.getEventById(eventId).orElse(null));
+        try {
+            // THE FIX: Removed .orElse(null) since the Service already unwraps it!
+            Event event = eventService.getEventById(eventId);
+            return ResponseEntity.ok(event);
+        } catch (RuntimeException e) {
+            // Safely returns a 404 if the Event ID doesn't exist
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/update-setup/{eventId}")
     public ResponseEntity<Event> updateSetup(@PathVariable("eventId") Long eventId, @RequestBody Event event) {
-        return ResponseEntity.ok(eventService.updateEvent(eventId, event));
+        try {
+            return ResponseEntity.ok(eventService.updateEvent(eventId, event));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // THE NOTIFICATION ENDPOINT: Fetches live alerts for the Staff Header Beacon
+    @GetMapping("/notifications")
+    public ResponseEntity<java.util.List<com.edutech.eventmanagementsystem.entity.Notification>> getStaffNotifications() {
+        return ResponseEntity.ok(notificationRepository.findByTargetRoleOrderByIdDesc("STAFF"));
     }
 }

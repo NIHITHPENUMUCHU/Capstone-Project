@@ -11,14 +11,14 @@ import { throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class HttpService {
-  
+
   // THE FIX: Properly calling the backend instead of throwing an error!
   getAllAllocations(): Observable<any> {
     return this.http.get(`${environment.apiUrl}/api/planner/allocations`, { headers: this.getHeaders() });
   }
 
   // The test specifically looks for 'service.serverName' for Login and Register
-  public serverName = environment.apiUrl; 
+  public serverName = environment.apiUrl;
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
@@ -45,6 +45,22 @@ export class HttpService {
 
   GetAllResources(): Observable<any> {
     return this.http.get(`${environment.apiUrl}/api/planner/resources`, { headers: this.getHeaders() });
+  }
+
+  getNotifications(rolePath: string): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/api/${rolePath}/notifications`, { headers: this.getHeaders() });
+  }
+
+  getActiveEvents(): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/api/client/events/active`, { headers: this.getHeaders() });
+  }
+
+  getClientEventDetails(eventId: number): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/api/client/event/${eventId}`, { headers: this.getHeaders() });
+  }
+
+  bookEventPass(eventId: number): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/api/client/book/${eventId}`, {}, { headers: this.getHeaders() });
   }
 
   createEvent(details: any): Observable<any> {

@@ -59,7 +59,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let event of eventList">
+            <tr *ngFor="let event of paginatedEventList">
               <td class="id-col">#{{ event.eventID || event.id || '...' }}</td>
               <td class="fw-bold">{{ event.title || event.name }}</td>
               
@@ -81,6 +81,21 @@
           </tbody>
         </table>
       </div>
+
+      <div class="pagination-container" *ngIf="totalPages > 1">
+        <button class="page-btn nav-btn" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Prev
+        </button>
+        <div class="page-numbers">
+          <button *ngFor="let p of getPagesArray()" class="page-btn" [class.active]="p === currentPage" (click)="changePage(p)">
+            {{ p }}
+          </button>
+        </div>
+        <button class="page-btn nav-btn" [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+          Next <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+
     </div>
   </div>
 </div>

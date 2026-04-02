@@ -18,8 +18,13 @@ export class ResourceAllocateComponent implements OnInit {
   resourceList: any[] = []; 
   eventList: any[] = [];
   allocationList: any[] = []; 
-  
   selectedResourceMax: number = 0;
+
+  // --- Pagination Variables ---
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+  totalPages: number = 0;
+  paginatedAllocationList: any[] = [];
 
   constructor(
     private formBuilder: FormBuilder, 
@@ -33,20 +38,12 @@ export class ResourceAllocateComponent implements OnInit {
       quantity: ['', [Validators.required, Validators.min(1)]] 
     });
 
-    // THE FIX: Listen to the resource dropdown to cap the max quantity dynamically!
     this.itemForm.get('resourceId')?.valueChanges.subscribe(resId => {
-      if (!resId) return; // Ignore if the form is being reset
-      
+      if (!resId) return;
       const selectedRes = this.resourceList.find(r => (r.resourceID || r.id) == resId);
       if (selectedRes) {
         this.selectedResourceMax = selectedRes.quantity || 0;
-        
-        // Apply the strict dynamic maximum limit to the input box
-        this.itemForm.get('quantity')?.setValidators([
-          Validators.required, 
-          Validators.min(1), 
-          Validators.max(this.selectedResourceMax) 
-        ]);
+        this.itemForm.get('quantity')?.setValidators([Validators.required, Validators.min(1), Validators.max(this.selectedResourceMax)]);
         this.itemForm.get('quantity')?.updateValueAndValidity();
       }
     });
@@ -57,17 +54,11 @@ export class ResourceAllocateComponent implements OnInit {
   }
 
   getEvent(): void {
-    this.httpService.GetAllevents().subscribe(
-      (data: any) => { this.eventList = data; },
-      (error: any) => { console.error("Failed to fetch events", error); }
-    );
+    this.httpService.GetAllevents().subscribe((data: any) => { this.eventList = data; });
   }
 
   getResources(): void {
-    this.httpService.GetAllResources().subscribe(
-      (data: any) => { this.resourceList = data; },
-      (error: any) => { console.error("Failed to fetch resources", error); }
-    );
+    this.httpService.GetAllResources().subscribe((data: any) => { this.resourceList = data; });
   }
 
   getAllocations(): void {
@@ -78,23 +69,42 @@ export class ResourceAllocateComponent implements OnInit {
           const eventId = alloc.event?.eventID || alloc.event?.id;
           const resourceId = alloc.resource?.resourceID || alloc.resource?.id;
           const uniqueKey = `${eventId}-${resourceId}`;
-          
-          if (seen.has(uniqueKey)) {
-            return false; 
-          } else {
-            seen.add(uniqueKey);
-            return true; 
-          }
+          if (seen.has(uniqueKey)) return false; 
+          seen.add(uniqueKey);
+          return true; 
         });
-      },
-      (error: any) => { console.error("Failed to fetch allocations", error); }
+        this.calculatePagination();
+      }
     );
+  }
+
+  // --- Pagination Logic ---
+  calculatePagination(): void {
+    this.totalPages = Math.ceil(this.allocationList.length / this.itemsPerPage);
+    if (this.currentPage > this.totalPages && this.totalPages > 0) this.currentPage = this.totalPages;
+    this.updatePaginatedList();
+  }
+
+  updatePaginatedList(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedAllocationList = this.allocationList.slice(startIndex, endIndex);
+  }
+
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updatePaginatedList();
+    }
+  }
+
+  getPagesArray(): number[] {
+    return Array(this.totalPages).fill(0).map((x, i) => i + 1);
   }
 
   onSubmit(): void {
     if (this.itemForm.valid) {
       const formValues = this.itemForm.value;
-      
       this.httpService.allocateResources(formValues.eventId, formValues.resourceId, formValues).subscribe(
         (res: any) => {
           this.showMessage = true;
@@ -103,15 +113,13 @@ export class ResourceAllocateComponent implements OnInit {
           
           this.itemForm.reset();
           this.getResources(); 
-          this.getAllocations(); 
+          this.getAllocations(); // Automatically updates pagination
           
           setTimeout(() => this.showMessage = false, 3000);
         },
         (error: any) => {
           this.showError = true;
           this.errorMessage = "Failed to allocate resource. Please check availability and try again.";
-          this.showMessage = false;
-          
           setTimeout(() => this.showError = false, 3000);
         }
       );

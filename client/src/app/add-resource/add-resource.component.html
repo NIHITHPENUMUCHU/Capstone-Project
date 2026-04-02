@@ -1,8 +1,7 @@
 <div class="page-wrapper animate-slide-up">
   <div class="page-header">
     <div class="header-icon orange-bg">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-        stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
         <polyline points="2 17 12 22 22 17"></polyline>
         <polyline points="2 12 12 17 22 12"></polyline>
@@ -25,8 +24,7 @@
         <div class="form-group">
           <label>Resource Name</label>
           <input type="text" formControlName="name" placeholder="e.g., 4K Projector">
-          <span class="validation-error"
-            *ngIf="itemForm.get('name')?.touched && itemForm.get('name')?.invalid">Required</span>
+          <span class="validation-error" *ngIf="itemForm.get('name')?.touched && itemForm.get('name')?.invalid">Required</span>
         </div>
 
         <div class="form-group">
@@ -37,8 +35,7 @@
             <option value="PERSONNEL">Human Personnel</option>
             <option value="VENUE">Venue / Room</option>
           </select>
-          <span class="validation-error"
-            *ngIf="itemForm.get('type')?.touched && itemForm.get('type')?.invalid">Required</span>
+          <span class="validation-error" *ngIf="itemForm.get('type')?.touched && itemForm.get('type')?.invalid">Required</span>
         </div>
 
         <div class="form-group" *ngIf="itemForm.get('quantity')">
@@ -67,15 +64,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let res of resourceList">
+            <tr *ngFor="let res of paginatedResourceList">
               <td class="id-col">#{{ res.resourceID || res.id || '...' }}</td>
               <td class="fw-bold">{{ res.name }}</td>
               <td>{{ res.type }}</td>
-
-              <td class="fw-bold" style="color: var(--c-teal);">
-                {{ res.quantity != null ? res.quantity : 0 }} Units
-              </td>
-
+              <td class="fw-bold" style="color: var(--c-teal);">{{ res.quantity != null ? res.quantity : 0 }} Units</td>
               <td>
                 <span class="status-badge" [ngClass]="res.availability ? 'available' : 'allocated'">
                   {{ res.availability ? 'AVAILABLE' : 'ALLOCATED' }}
@@ -88,6 +81,21 @@
           </tbody>
         </table>
       </div>
+
+      <div class="pagination-container" *ngIf="totalPages > 1">
+        <button class="page-btn nav-btn" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Prev
+        </button>
+        <div class="page-numbers">
+          <button *ngFor="let p of getPagesArray()" class="page-btn" [class.active]="p === currentPage" (click)="changePage(p)">
+            {{ p }}
+          </button>
+        </div>
+        <button class="page-btn nav-btn" [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+          Next <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+
     </div>
   </div>
 </div>
