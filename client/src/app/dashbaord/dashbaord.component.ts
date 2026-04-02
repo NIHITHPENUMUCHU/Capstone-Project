@@ -12,7 +12,7 @@ export class DashbaordComponent implements OnInit {
   roleName: string | null = null;
   currentDate: Date = new Date();
   
-  // NEW: User Identity Variables
+  // User Identity Variables
   username: string = 'User';
   lastLogin: Date = new Date(); 
   
@@ -36,20 +36,35 @@ export class DashbaordComponent implements OnInit {
     const rawRole = this.authService.getRole();
     this.roleName = rawRole ? rawRole.toUpperCase() : null;
 
-    // THE FIX: Fetch the username from localStorage (fallback to 'User' if not found)
+    // 1. Fetch exact Username first
     const storedName = localStorage.getItem('username');
-    if (storedName) {
-      this.username = storedName;
+    let rawUsernameForKeys = 'unknown_user'; // Fallback key
+
+    if (storedName && storedName.trim() !== '') {
+      rawUsernameForKeys = storedName.toLowerCase(); // Used to create isolated memory slots
+      this.username = storedName.charAt(0).toUpperCase() + storedName.slice(1); // Used for UI display
+    } else {
+      if (this.roleName === 'PLANNER') this.username = 'Event Planner';
+      else if (this.roleName === 'STAFF') this.username = 'Operations Staff';
+      else if (this.roleName === 'CLIENT') this.username = 'Valued Client';
+      else this.username = 'User';
     }
 
-    // THE FIX: Fetch Last Login (or set it to now if they just logged in)
-    const storedLastLogin = localStorage.getItem('lastLogin');
-    if (storedLastLogin) {
-      this.lastLogin = new Date(storedLastLogin);
+    // 2. THE FIX: Create 100% unique memory keys based on the exact USER, not just the role!
+    const loginKey = 'lastLogin_' + rawUsernameForKeys; 
+    const sessionKey = 'session_active_' + rawUsernameForKeys;
+    
+    const isNewSession = !sessionStorage.getItem(sessionKey);
+    
+    if (isNewSession) {
+        // It is a new login for THIS specific user!
+        this.lastLogin = new Date();
+        localStorage.setItem(loginKey, this.lastLogin.toISOString());
+        sessionStorage.setItem(sessionKey, 'true'); 
     } else {
-      // If your backend doesn't send a lastLogin date yet, we log the current time as their session start!
-      this.lastLogin = new Date();
-      localStorage.setItem('lastLogin', this.lastLogin.toISOString());
+        // They are already logged in, grab their personal saved timestamp
+        const storedLastLogin = localStorage.getItem(loginKey);
+        this.lastLogin = storedLastLogin ? new Date(storedLastLogin) : new Date();
     }
 
     if (this.roleName === 'PLANNER') {
@@ -58,7 +73,6 @@ export class DashbaordComponent implements OnInit {
   }
 
   fetchLiveMetrics(): void {
-    // ... Keep your exact existing fetchLiveMetrics() code here! ...
     this.httpService.GetAllevents().subscribe((data: any[]) => { 
         if (data) {
           this.totalEvents = data.length;

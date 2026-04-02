@@ -138,7 +138,7 @@
 
 .metric-card {
   background: #ffffff; border-radius: 16px; padding: 30px; display: flex; align-items: center; gap: 25px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05); border-left: 6px solid transparent; transition: transform 0.3s ease;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.25); border-left: 6px solid transparent; transition: transform 0.3s ease;
   
   &:hover { transform: translateY(-5px); }
   
