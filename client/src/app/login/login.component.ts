@@ -38,8 +38,25 @@ export class LoginComponent implements OnInit {
             this.authService.saveToken(res.token);
             this.authService.SetRole(res.role); 
 
-            // THE FIX: Saves the securely validated username to memory for the dashboard greeting
-            localStorage.setItem('username', this.itemForm.value.username);
+            // 1. Save the username
+            const currentUsername = this.itemForm.value.username;
+            const normalizedName = currentUsername.toLowerCase();
+            localStorage.setItem('username', currentUsername);
+            
+            // 2. THE FIX: The Timestamp Rotation!
+            // First, get the old login time (if it exists)
+            const oldLoginTime = localStorage.getItem('lastLogin_' + normalizedName);
+            
+            if (oldLoginTime) {
+               // Move the old time into the "previous" slot
+               localStorage.setItem('previousLogin_' + normalizedName, oldLoginTime);
+            } else {
+               // If it's their absolute first time logging in, just use current time so it's not blank
+               localStorage.setItem('previousLogin_' + normalizedName, new Date().toISOString());
+            }
+
+            // Finally, record the NEW current login time
+            localStorage.setItem('lastLogin_' + normalizedName, new Date().toISOString());
 
             this.router.navigateByUrl('/dashboard');
           } else {

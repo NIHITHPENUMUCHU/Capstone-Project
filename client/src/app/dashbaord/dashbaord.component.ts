@@ -36,13 +36,13 @@ export class DashbaordComponent implements OnInit {
     const rawRole = this.authService.getRole();
     this.roleName = rawRole ? rawRole.toUpperCase() : null;
 
-    // 1. Fetch exact Username first
+    // 1. Fetch exact Username
     const storedName = localStorage.getItem('username');
-    let rawUsernameForKeys = 'unknown_user'; // Fallback key
+    let rawUsernameForKeys = 'unknown_user'; 
 
     if (storedName && storedName.trim() !== '') {
-      rawUsernameForKeys = storedName.toLowerCase(); // Used to create isolated memory slots
-      this.username = storedName.charAt(0).toUpperCase() + storedName.slice(1); // Used for UI display
+      rawUsernameForKeys = storedName.toLowerCase(); 
+      this.username = storedName.charAt(0).toUpperCase() + storedName.slice(1); 
     } else {
       if (this.roleName === 'PLANNER') this.username = 'Event Planner';
       else if (this.roleName === 'STAFF') this.username = 'Operations Staff';
@@ -50,21 +50,16 @@ export class DashbaordComponent implements OnInit {
       else this.username = 'User';
     }
 
-    // 2. THE FIX: Create 100% unique memory keys based on the exact USER, not just the role!
-    const loginKey = 'lastLogin_' + rawUsernameForKeys; 
-    const sessionKey = 'session_active_' + rawUsernameForKeys;
+    // 2. THE FIX: Read the PREVIOUS login time that we rotated in the Login Component!
+    const previousLoginKey = 'previousLogin_' + rawUsernameForKeys; 
+    const storedPreviousLogin = localStorage.getItem(previousLoginKey);
     
-    const isNewSession = !sessionStorage.getItem(sessionKey);
-    
-    if (isNewSession) {
-        // It is a new login for THIS specific user!
-        this.lastLogin = new Date();
-        localStorage.setItem(loginKey, this.lastLogin.toISOString());
-        sessionStorage.setItem(sessionKey, 'true'); 
+    if (storedPreviousLogin) {
+      this.lastLogin = new Date(storedPreviousLogin);
     } else {
-        // They are already logged in, grab their personal saved timestamp
-        const storedLastLogin = localStorage.getItem(loginKey);
-        this.lastLogin = storedLastLogin ? new Date(storedLastLogin) : new Date();
+      // Emergency fallback just in case memory was cleared
+      const currentLogin = localStorage.getItem('lastLogin_' + rawUsernameForKeys);
+      this.lastLogin = currentLogin ? new Date(currentLogin) : new Date();
     }
 
     if (this.roleName === 'PLANNER') {
