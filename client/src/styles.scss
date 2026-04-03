@@ -1,8 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;500;600&display=swap');
 
-/* ==========================================================================
-   1. ENTERPRISE LIGHT THEME VARIABLES
-   ========================================================================== */
 :root {
   --primary-dark: #0f172a;     /* Slate 900 - Dark Text */
   --accent-main: #4f46e5;      /* Indigo 600 - Primary Brand */
@@ -52,3 +49,13 @@ h1, h2, h3, h4, h5 { font-family: 'Montserrat', sans-serif; color: var(--primary
 /* Live Pulse */
 @keyframes pulse-ring { 0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
 .live-pulse { display: inline-block; width: 8px; height: 8px; background-color: var(--success); border-radius: 50%; animation: pulse-ring 2s infinite; margin-right: 8px; }
+
+/* Hides the global navbar when generating ticket PDFs */
+@media print {
+  .global-header {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+  }
+}

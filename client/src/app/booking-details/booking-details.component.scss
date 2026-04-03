@@ -433,3 +433,75 @@
     grid-template-columns: 1fr !important;
   }
 }
+
+/* --- Download PDF Button --- */
+.ticket-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.btn-download-pdf {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(13, 148, 136, 0.1);
+  color: var(--c-teal);
+  border: 1px solid rgba(13, 148, 136, 0.3);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  svg { width: 16px; height: 16px; }
+
+  &:hover {
+    background: var(--c-teal);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+  }
+}
+
+/* --- High-Res PDF / Print Engine Rules --- */
+@media print {
+  /* Hide the web-app UI elements */
+  .page-header, 
+  .tab-navigation, 
+  .catalog-grid,
+  .empty-state { 
+    display: none !important; 
+  }
+  
+  /* Hide all tickets EXCEPT the one being printed */
+  .digital-ticket:not(.print-target) { 
+    display: none !important; 
+  }
+  
+  /* Format the selected ticket to look perfect on a white PDF page */
+  .print-target {
+    position: fixed;
+    top: 50px;
+    left: 5%;
+    width: 90%;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: 2px solid #000 !important;
+    border-radius: 0 !important;
+    page-break-inside: avoid;
+    
+    .btn-download-pdf { 
+      display: none !important; /* Hide the button inside the PDF */
+    }
+
+    /* Enforce exact colors for the PDF generation */
+    .ticket-stub {
+      background: #0D9488 !important;
+      -webkit-print-color-adjust: exact; 
+      print-color-adjust: exact;
+    }
+  }
+}
+
