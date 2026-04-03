@@ -51,6 +51,14 @@ export class HttpService {
     return this.http.get(`${environment.apiUrl}/api/${rolePath}/notifications`, { headers: this.getHeaders() });
   }
 
+  markNotificationRead(rolePath: string, id: number): Observable<any> {
+    return this.http.put(`${environment.apiUrl}/api/${rolePath}/notifications/${id}/read`, {}, { headers: this.getHeaders() });
+  }
+
+  markAllNotificationsRead(rolePath: string): Observable<any> {
+    return this.http.put(`${environment.apiUrl}/api/${rolePath}/notifications/read-all`, {}, { headers: this.getHeaders() });
+  }
+
   getActiveEvents(): Observable<any> {
     return this.http.get(`${environment.apiUrl}/api/client/events/active`, { headers: this.getHeaders() });
   }

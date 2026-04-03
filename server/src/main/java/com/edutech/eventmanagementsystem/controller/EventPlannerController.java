@@ -44,8 +44,8 @@ public class EventPlannerController {
 
     @PostMapping("/allocate-resources")
     public ResponseEntity<Allocation> allocateResources(
-            @RequestParam("eventId") Long eventId, 
-            @RequestParam("resourceId") Long resourceId, 
+            @RequestParam("eventId") Long eventId,
+            @RequestParam("resourceId") Long resourceId,
             @RequestBody Allocation allocation) {
         return ResponseEntity.ok(resourceService.allocateResource(eventId, resourceId, allocation.getQuantity()));
     }
@@ -54,10 +54,34 @@ public class EventPlannerController {
     public ResponseEntity<List<Allocation>> getAllocations() {
         return ResponseEntity.ok(resourceService.getAllAllocations()); // Assuming your ResourceService has this method
     }
-    
-    @Autowired private com.edutech.eventmanagementsystem.repository.NotificationRepository notificationRepository;
+
+    @Autowired
+    private com.edutech.eventmanagementsystem.repository.NotificationRepository notificationRepository;
+
     @GetMapping("/notifications")
     public org.springframework.http.ResponseEntity<java.util.List<com.edutech.eventmanagementsystem.entity.Notification>> getPlannerNotifications() {
-        return org.springframework.http.ResponseEntity.ok(notificationRepository.findByTargetRoleOrderByIdDesc("PLANNER"));
+        return org.springframework.http.ResponseEntity
+                .ok(notificationRepository.findByTargetRoleOrderByIdDesc("PLANNER"));
     }
+
+    @PutMapping("/notifications/{id}/read")
+    public org.springframework.http.ResponseEntity<?> markNotificationRead(@PathVariable Long id) {
+        com.edutech.eventmanagementsystem.entity.Notification notif = notificationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found"));
+        notif.setIsRead(true);
+        notificationRepository.save(notif);
+        return org.springframework.http.ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/notifications/read-all")
+    public org.springframework.http.ResponseEntity<?> markAllNotificationsRead() {
+        java.util.List<com.edutech.eventmanagementsystem.entity.Notification> notifs = notificationRepository
+                .findByTargetRoleOrderByIdDesc("PLANNER");
+        for (com.edutech.eventmanagementsystem.entity.Notification n : notifs) {
+            n.setIsRead(true);
+        }
+        notificationRepository.saveAll(notifs);
+        return org.springframework.http.ResponseEntity.ok().build();
+    }
+
 }

@@ -1,8 +1,7 @@
 package com.edutech.eventmanagementsystem.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 public class Notification {
@@ -12,7 +11,12 @@ public class Notification {
 
     private String message;
     private String targetRole;
-    private LocalDateTime timestamp = LocalDateTime.now();
+    
+    // THE FIX: java.util.Date automatically formats to perfect local time in Angular!
+    private Date timestamp = new Date(); 
+    
+    // NEW FEATURE: Read Status
+    private boolean isRead = false; 
 
     public Notification() {}
     public Long getId() { return id; }
@@ -21,6 +25,8 @@ public class Notification {
     public void setMessage(String message) { this.message = message; }
     public String getTargetRole() { return targetRole; }
     public void setTargetRole(String targetRole) { this.targetRole = targetRole; }
-    public LocalDateTime getTimestamp() { return timestamp; }
-    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
+    public Date getTimestamp() { return timestamp; }
+    public void setTimestamp(Date timestamp) { this.timestamp = timestamp; }
+    public boolean getIsRead() { return isRead; }
+    public void setIsRead(boolean isRead) { this.isRead = isRead; }
 }

@@ -53,7 +53,7 @@ export class DashbaordComponent implements OnInit {
     // 2. THE FIX: Read the PREVIOUS login time that we rotated in the Login Component!
     const previousLoginKey = 'previousLogin_' + rawUsernameForKeys; 
     const storedPreviousLogin = localStorage.getItem(previousLoginKey);
-    
+
     if (storedPreviousLogin) {
       this.lastLogin = new Date(storedPreviousLogin);
     } else {

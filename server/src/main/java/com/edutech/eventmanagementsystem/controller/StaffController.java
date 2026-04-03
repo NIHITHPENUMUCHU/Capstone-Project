@@ -15,7 +15,7 @@ public class StaffController {
     private EventService eventService;
 
     // Injected for the new Staff Orbital Beacon
-    @Autowired 
+    @Autowired
     private com.edutech.eventmanagementsystem.repository.NotificationRepository notificationRepository;
 
     @GetMapping("/event-details/{eventId}")
@@ -44,4 +44,25 @@ public class StaffController {
     public ResponseEntity<java.util.List<com.edutech.eventmanagementsystem.entity.Notification>> getStaffNotifications() {
         return ResponseEntity.ok(notificationRepository.findByTargetRoleOrderByIdDesc("STAFF"));
     }
+
+    @PutMapping("/notifications/{id}/read")
+    public ResponseEntity<?> markNotificationRead(@PathVariable Long id) {
+        com.edutech.eventmanagementsystem.entity.Notification notif = notificationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found"));
+        notif.setIsRead(true);
+        notificationRepository.save(notif);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/notifications/read-all")
+    public ResponseEntity<?> markAllNotificationsRead() {
+        java.util.List<com.edutech.eventmanagementsystem.entity.Notification> notifs = notificationRepository
+                .findByTargetRoleOrderByIdDesc("STAFF");
+        for (com.edutech.eventmanagementsystem.entity.Notification n : notifs) {
+            n.setIsRead(true);
+        }
+        notificationRepository.saveAll(notifs);
+        return ResponseEntity.ok().build();
+    }
+
 }
